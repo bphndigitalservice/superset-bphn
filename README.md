@@ -72,12 +72,21 @@ In `.env`:
 SUPERSET_AUTH_TYPE=db
 ```
 
-Remove or comment out `KEYCLOAK_*` variables. Rebuild and restart:
+Keycloak variables are ignored in `db` mode. **Recreate** containers so env is picked up (restart alone is not always enough):
 
 ```bash
 docker compose build superset
-docker compose up -d
+docker compose up -d --force-recreate superset superset-worker superset-beat
 ```
+
+Confirm in logs:
+
+```bash
+docker compose logs superset 2>&1 | grep superset_config
+# Expected: SUPERSET_AUTH_TYPE='db' -> database
+```
+
+Login at `/login/` (username/password form). No “Sign in with keycloak” button.
 
 Create users with `superset fab create-admin` (first admin) or FAB user management after login.
 

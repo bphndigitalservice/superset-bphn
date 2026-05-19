@@ -74,12 +74,15 @@ BABEL_DEFAULT_LOCALE = "en"
 
 # ---------------------------------------------------------------------------
 # Auth: local DB only, or Keycloak OIDC + local break-glass (/login/db)
-# Set SUPERSET_AUTH_TYPE=db | oauth (default: oauth)
+# Set SUPERSET_AUTH_TYPE=db | oauth in .env (must recreate containers after change)
 # ---------------------------------------------------------------------------
-_SUPERSET_AUTH_TYPE = os.getenv("SUPERSET_AUTH_TYPE", "oauth").lower()
+_SUPERSET_AUTH_TYPE = os.getenv("SUPERSET_AUTH_TYPE", "db").strip().lower()
 
-if _SUPERSET_AUTH_TYPE == "db":
+_USE_DB_AUTH = _SUPERSET_AUTH_TYPE in ("db", "database", "local", "auth_db")
+
+if _USE_DB_AUTH:
     AUTH_TYPE = AUTH_DB
+    OAUTH_PROVIDERS = []
 else:
     from security_manager import CustomSecurityManager
 
@@ -110,6 +113,12 @@ else:
 
     AUTH_ROLES_SYNC_AT_LOGIN = True
     AUTH_ROLES_MAPPING = json.loads(os.getenv("AUTH_ROLES_MAPPING_JSON", "{}"))
+
+print(
+    f"[superset_config] SUPERSET_AUTH_TYPE={_SUPERSET_AUTH_TYPE!r} "
+    f"-> {'database' if _USE_DB_AUTH else 'oauth (Keycloak)'}",
+    flush=True,
+)
 
 # ---------------------------------------------------------------------------
 # Redis / cache / Celery
