@@ -1,0 +1,4 @@
+services:
+  superset:
+    environment:
+      LOAD_EXAMPLES: "true"

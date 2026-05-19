@@ -1,3 +1,8 @@
+include:
+  - path: docker/compose.examples.yaml
+    profiles:
+      - examples
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -28,6 +33,8 @@ services:
     image: superset-bphn:local
     restart: unless-stopped
     env_file: .env
+    environment:
+      LOAD_EXAMPLES: ${LOAD_EXAMPLES:-false}
     ports:
       - "127.0.0.1:8088:8088"
     volumes:
@@ -38,12 +45,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command:
-      [
-        "/bin/sh",
-        "-c",
-        "superset db upgrade && /app/docker/entrypoints/run-server.sh",
-      ]
+    command: ["/app/docker/entrypoints/entrypoint-with-examples.sh"]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8088/health"]
       interval: 30s

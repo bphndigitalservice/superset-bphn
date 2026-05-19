@@ -55,6 +55,28 @@ docker compose exec superset superset init
 http://127.0.0.1:8088
 ```
 
+## Example dashboards & datasets
+
+Optional stock Apache examples (World Bank, flights, etc.) for onboarding and demos. Data is downloaded from GitHub on first load and stored in a local `examples` database connection.
+
+| Environment | How to enable |
+|-------------|----------------|
+| Local dev | `docker compose --profile examples up -d` |
+| Production | Set `LOAD_EXAMPLES=true` in `.env`, then `docker compose up -d --force-recreate superset` |
+| Default | Off — no examples loaded |
+
+**Requirements:** Outbound HTTPS to GitHub on first load; can take several minutes and use significant CPU. Not suitable for air-gapped installs without a mirror (v1).
+
+**Bootstrap unchanged:** create admin and run `superset init` as above, then open **Dashboards** to explore examples.
+
+**Manual load** (if startup load was skipped or failed):
+
+```bash
+docker compose exec superset superset load_examples
+```
+
+**Reset examples:** remove the `examples` database in **Data → Databases**, or wipe metadata (`docker compose down -v` destroys `postgres_data` — back up first).
+
 ## Authentication
 
 Controlled by `SUPERSET_AUTH_TYPE` in `.env`:

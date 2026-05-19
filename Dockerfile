@@ -52,6 +52,9 @@ ENV SUPERSET_HOME=/app/superset_home
 # Writable home for Celery beat schedule and other runtime state
 RUN mkdir -p /app/superset_home && chown -R superset:superset /app/superset_home
 
+COPY docker/entrypoint-with-examples.sh /app/docker/entrypoints/entrypoint-with-examples.sh
+RUN chmod +x /app/docker/entrypoints/entrypoint-with-examples.sh
+
 # apache/superset lean image omits service-worker.js (https://github.com/apache/superset/issues/39431)
 RUN if [ ! -f /app/superset/static/service-worker.js ]; then \
       printf '%s\n' "'use strict';self.addEventListener('install',function(){self.skipWaiting();});" \
