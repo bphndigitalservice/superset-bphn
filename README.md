@@ -16,6 +16,25 @@ Production Apache Superset image and Docker Compose stack for BPHN.
 - External HTTPS reverse proxy (TLS termination)
 - External Keycloak realm and OIDC client
 
+## Quick install (curl)
+
+Deploy with the published GHCR image (no clone or local build):
+
+```bash
+mkdir superset && cd superset
+curl -fsSL https://raw.githubusercontent.com/bphndigitalservice/superset-bphn/main/scripts/install.sh | bash
+```
+
+Upgrade an existing install in the same directory:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/bphndigitalservice/superset-bphn/main/scripts/install.sh | bash -s upgrade
+```
+
+See [curl installer design](docs/superpowers/specs/2026-05-19-curl-installer-design.md) for modes, Keycloak checklist, and troubleshooting.
+
+For development (local image build), use **Quick start** below.
+
 ## Quick start
 
 1. Copy environment template and set secrets:

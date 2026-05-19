@@ -1,0 +1,23 @@
+name: Lint installer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/install.sh"
+      - ".github/workflows/lint-installer.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/install.sh"
+      - ".github/workflows/lint-installer.yml"
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ShellCheck
+        uses: koalaman/shellcheck-action@v0.9
+        with:
+          scandir: scripts
