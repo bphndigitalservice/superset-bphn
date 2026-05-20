@@ -1,6 +1,26 @@
 #!/bin/sh
 set -e
 
+# Compose `depends_on: healthy` does not guarantee embedded DNS is ready on all hosts.
+# Also avoids racing `superset db upgrade` before Postgres accepts TCP.
+wait_for_postgres_tcp() {
+  echo "Waiting for postgres:5432 (Compose DNS + TCP)…"
+  i=0
+  while [ "$i" -lt 90 ]; do
+    if /app/.venv/bin/python -c 'import socket; s=socket.create_connection(("postgres", 5432), 3); s.close()' 2>/dev/null; then
+      echo "postgres is reachable."
+      return 0
+    fi
+    i=$((i + 1))
+    sleep 1
+  done
+  echo "error: postgres:5432 not reachable after 90s (DNS or routing)."
+  echo "hint: docker compose exec superset getent hosts postgres  # should print an IP"
+  exit 1
+}
+
+wait_for_postgres_tcp
+
 load_examples_enabled() {
   case "$(printf '%s' "${LOAD_EXAMPLES:-false}" | tr '[:upper:]' '[:lower:]')" in
     true|1|yes) return 0 ;;

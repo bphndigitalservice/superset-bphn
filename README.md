@@ -221,9 +221,9 @@ That message means the **Superset container cannot resolve the Compose service n
    docker compose exec superset getent hosts postgres
    ```
 
-   You should get an IP (e.g. `10.10.10.x`). If this fails, Superset is not on the same user-defined network as Postgres.
+   You should get an IP address. If this fails, the `superset` container is not on the same Compose network as `postgres` (e.g. stack started from the wrong directory, or a broken Docker DNS setup).
 
-3. **Recreate networks after upgrading compose files** (Compose now uses a **project-scoped** network name instead of a global `superset-network` to avoid clashes between installs on one host):
+3. **Use the bundled compose files as-is** — services share Compose’s **default project network** (`<project>_default`, e.g. `superset_default`). Older revisions used a custom bridge + fixed subnet `10.10.10.0/24`, which can clash with VPN routes and break embedded DNS. After `git pull`:
 
    ```bash
    docker compose down
@@ -231,6 +231,8 @@ That message means the **Superset container cannot resolve the Compose service n
    ```
 
 4. **VPN / corporate DNS / Docker Desktop** sometimes breaks container DNS. Restart Docker or disconnect VPN and retry step 2.
+
+5. On startup the image entrypoint **waits up to 90s** for `postgres:5432` before `superset db upgrade`, so transient DNS/TCP races are less likely.
 
 `DATABASE_URL` should keep host **`postgres`** (the service name) when using this repository’s Compose files.
 
