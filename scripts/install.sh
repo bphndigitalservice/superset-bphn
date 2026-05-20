@@ -33,24 +33,12 @@ fetch_template() {
   curl -fsSL "${RAW_BASE}/${remote_path}" -o "$dest" || die "failed to download ${remote_path} from GitHub"
 }
 
-superset_port_bind() {
-  case "${INSTALL_MODE:-simple}" in
-    production) echo "127.0.0.1:8088:8088" ;;
-    *) echo "0.0.0.0:8088:8088" ;;
-  esac
-}
-
 read_install_mode() {
   if [ -f .install-meta ] && grep -q '^mode=production$' .install-meta 2>/dev/null; then
     INSTALL_MODE=production
   else
     INSTALL_MODE=simple
   fi
-}
-
-substitute_compose_template() {
-  local template="$1" dest="$2"
-  sed -e "s|{{SUPERSET_PORT_BIND}}|$(superset_port_bind)|g" "$template" >"$dest"
 }
 
 substitute_env_template() {
@@ -62,6 +50,7 @@ substitute_env_template() {
     -e "s|{{SUPERSET_WEBSERVER_BASE_URL}}|${SUPERSET_WEBSERVER_BASE_URL}|g" \
     -e "s|{{PREFERRED_URL_SCHEME}}|${PREFERRED_URL_SCHEME}|g" \
     -e "s|{{SESSION_COOKIE_SECURE}}|${SESSION_COOKIE_SECURE}|g" \
+    -e "s|{{SUPERSET_PORT_PUBLISH_HOST}}|${SUPERSET_PORT_PUBLISH_HOST}|g" \
     -e "s|{{SUPERSET_AUTH_TYPE}}|${SUPERSET_AUTH_TYPE}|g" \
     -e "s|{{LOAD_EXAMPLES}}|${LOAD_EXAMPLES}|g" \
     "$template" >"$dest"
@@ -165,12 +154,14 @@ cmd_install() {
   case "$MODE_CHOICE" in
     1|"simple"|"Simple")
       INSTALL_MODE=simple
+      SUPERSET_PORT_PUBLISH_HOST=0.0.0.0
       SUPERSET_WEBSERVER_BASE_URL="http://127.0.0.1:8088"
       PREFERRED_URL_SCHEME=http
       SESSION_COOKIE_SECURE=false
       ;;
     2|"production"|"Production")
       INSTALL_MODE=production
+      SUPERSET_PORT_PUBLISH_HOST=127.0.0.1
       read -r -p "Public HTTPS URL (e.g. https://analytics.example.com): " SUPERSET_WEBSERVER_BASE_URL
       [ -n "$SUPERSET_WEBSERVER_BASE_URL" ] || die "URL is required"
       case "$SUPERSET_WEBSERVER_BASE_URL" in
@@ -198,9 +189,9 @@ cmd_install() {
   mkdir -p branding
   local tmpdir
   tmpdir="$(mktemp -d)"
-  fetch_template "docker/docker-compose.install.yml" "${tmpdir}/compose.template.yml"
+  fetch_template "docker/docker-compose.install.yml" "${tmpdir}/compose.yml"
   fetch_template "install/.env.template" "${tmpdir}/env.template"
-  substitute_compose_template "${tmpdir}/compose.template.yml" docker-compose.yml
+  cp "${tmpdir}/compose.yml" docker-compose.yml
   substitute_env_template "${tmpdir}/env.template" .env
   rm -rf "$tmpdir"
 
@@ -242,10 +233,23 @@ cmd_upgrade() {
 
   read_install_mode
 
+  if ! grep -qE '^SUPERSET_PORT_PUBLISH_HOST=' .env 2>/dev/null; then
+    {
+      echo ""
+      echo "# Port bind (added by install.sh upgrade — required by docker-compose.install.yml)"
+      if [ "${INSTALL_MODE:-simple}" = production ]; then
+        echo "SUPERSET_PORT_PUBLISH_HOST=127.0.0.1"
+      else
+        echo "SUPERSET_PORT_PUBLISH_HOST=0.0.0.0"
+      fi
+    } >> .env
+    info "appended SUPERSET_PORT_PUBLISH_HOST to .env (older install)"
+  fi
+
   local tmpdir
   tmpdir="$(mktemp -d)"
-  fetch_template "docker/docker-compose.install.yml" "${tmpdir}/compose.template.yml"
-  substitute_compose_template "${tmpdir}/compose.template.yml" docker-compose.yml
+  fetch_template "docker/docker-compose.install.yml" "${tmpdir}/compose.yml"
+  cp "${tmpdir}/compose.yml" docker-compose.yml
   rm -rf "$tmpdir"
 
   info "pulling images (${IMAGE})…"
@@ -259,7 +263,7 @@ cmd_upgrade() {
 
 --- Upgrade complete ---
 Image:    ${IMAGE}
-.env:     unchanged
+.env:     checked — SUPERSET_PORT_PUBLISH_HOST added if missing (for compose port bind)
 URL:      check SUPERSET_WEBSERVER_BASE_URL in .env
 
 EOF

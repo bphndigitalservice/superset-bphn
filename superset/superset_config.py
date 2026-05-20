@@ -43,21 +43,35 @@ if _favicon:
 # Security / proxy
 # ---------------------------------------------------------------------------
 ENABLE_PROXY_FIX = True
-PREFERRED_URL_SCHEME = os.getenv("PREFERRED_URL_SCHEME", "https")
+_webserver_base = os.getenv("SUPERSET_WEBSERVER_BASE_URL", "").strip()
+PREFERRED_URL_SCHEME = os.getenv("PREFERRED_URL_SCHEME", "https").strip().lower()
+if PREFERRED_URL_SCHEME not in ("http", "https"):
+    PREFERRED_URL_SCHEME = "https"
+
 SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "true").lower() == "true"
+
+# Root cause of "CSRF session token is missing" on plain HTTP: browsers never store
+# or send Secure session cookies on http://. Align flags with SUPERSET_WEBSERVER_BASE_URL.
+if _webserver_base.startswith("http://"):
+    if SESSION_COOKIE_SECURE:
+        print(
+            "[superset_config] INFO: SUPERSET_WEBSERVER_BASE_URL uses http:// — forcing "
+            "SESSION_COOKIE_SECURE=false (Secure cookies are not applied on HTTP; without "
+            "this, login and CSRF refresh fail).",
+            flush=True,
+        )
+    SESSION_COOKIE_SECURE = False
+    if PREFERRED_URL_SCHEME == "https":
+        print(
+            "[superset_config] INFO: SUPERSET_WEBSERVER_BASE_URL is http:// — setting "
+            "PREFERRED_URL_SCHEME=http so redirects match how users reach the app.",
+            flush=True,
+        )
+        PREFERRED_URL_SCHEME = "http"
+
 SESSION_COOKIE_HTTPONLY = True
 WTF_CSRF_ENABLED = True
 
-_webserver_base = os.getenv("SUPERSET_WEBSERVER_BASE_URL", "").strip()
-if _webserver_base.startswith("http://") and SESSION_COOKIE_SECURE:
-    print(
-        "[superset_config] WARNING: SUPERSET_WEBSERVER_BASE_URL uses http:// but "
-        "SESSION_COOKIE_SECURE=true — browsers will not persist session cookies over "
-        "plain HTTP, which breaks login (CSRF session token is missing). "
-        "Set SESSION_COOKIE_SECURE=false and PREFERRED_URL_SCHEME=http for direct HTTP "
-        "access, or use HTTPS (reverse proxy) and keep secure cookies.",
-        flush=True,
-    )
 TALISMAN_ENABLED = True
 TALISMAN_CONFIG = {
     "content_security_policy": {

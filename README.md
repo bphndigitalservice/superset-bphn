@@ -31,6 +31,8 @@ Upgrade an existing install in the same directory:
 curl -fsSL https://raw.githubusercontent.com/bphndigitalservice/superset-bphn/main/scripts/install.sh | bash -s upgrade
 ```
 
+The compose file binds host port `8088` using `SUPERSET_PORT_PUBLISH_HOST` from `.env` (`0.0.0.0` for simple mode, `127.0.0.1` when installed for production behind a reverse proxy on the same host).
+
 See [curl installer design](docs/superpowers/specs/2026-05-19-curl-installer-design.md) for modes, Keycloak checklist, and troubleshooting.
 
 For development (local image build), use **Quick start** below.
@@ -137,11 +139,11 @@ Create users with `superset fab create-admin` (first admin) or FAB user manageme
 
 **Ranked causes**
 
-1. **`SESSION_COOKIE_SECURE=true` while you use plain `http://` (e.g. `http://172.27.11.28:8088`).** Browsers do not store or send `Secure` cookies on HTTP, so Flask has no session on `POST /login/` → CSRF token missing. *Fix:* in `.env` set `SESSION_COOKIE_SECURE=false`, `PREFERRED_URL_SCHEME=http`, and `SUPERSET_WEBSERVER_BASE_URL` to the exact URL you type in the browser (including host/port). Recreate containers: `docker compose up -d --force-recreate superset superset-worker superset-beat`.
+1. **`SESSION_COOKIE_SECURE=true` while you use plain `http://` (e.g. `http://172.27.11.28:8088`).** Browsers do not store or send `Secure` cookies on HTTP, so Flask has no session on `POST /login/` → CSRF token missing. **`superset_config.py` forces `SESSION_COOKIE_SECURE=false` and `PREFERRED_URL_SCHEME=http` whenever `SUPERSET_WEBSERVER_BASE_URL` starts with `http://`**, so mis-copied `.env` still works after image rebuild. For clarity you can still set those vars explicitly in `.env`. Real production should use `https://` in `SUPERSET_WEBSERVER_BASE_URL` and TLS in front of the app.
 2. **Base URL mismatch** (`SUPERSET_WEBSERVER_BASE_URL` does not match how users reach Superset), causing redirects and odd `next=` chains. *Fix:* align `SUPERSET_WEBSERVER_BASE_URL` with the real origin (or put HTTPS + correct `X-Forwarded-*` behind a proxy and use the public HTTPS URL).
 3. **Third-party cookie / ITP issues** (rare for first-party same-host login). *Fix:* try another browser; rule out (1) first.
 
-On container start, `superset_config` logs a **warning** when (1) applies (`http://` base URL + secure cookies).
+On container start, `superset_config` logs **INFO** lines when it auto-aligns cookies/scheme for `http://` base URLs.
 
 ### Keycloak SSO (default)
 
