@@ -205,10 +205,24 @@ https://<host>/login/db
 
 That message means the **Superset container cannot resolve the Compose service name `postgres`** (embedded Docker DNS), not wrong password.
 
-**What your `network inspect` showed**
+**What your diagnostics showed**
 
-- Network `superset_default` used subnet **`172.17.0.0/16`** — the same range as Docker’s **`docker0`** default bridge. That overlap can break **embedded DNS / routing** for other containers (you may only see `redis` and `postgres` attached while `superset` fails to resolve `postgres`).
-- Current compose in this repo defines **`superset_internal` with `172.30.0.0/16`** so the stack does not share `docker0`’s subnet.
+- A Compose **default** bridge sometimes gets **`172.17.0.0/16`** (same idea as `docker0`), which can confuse **embedded DNS** for other containers.
+- Your `NetworkSettings` for `superset_superset_internal` had **empty `IPAddress` / `EndpointID`** — the Superset container was **not actually attached** to that bridge (no veth / no lease). Until that is fixed, `postgres` will not resolve from inside Superset.
+
+This repo uses a dedicated **`superset_backend`** user-defined bridge with **no fixed `ipam` subnet** so Docker allocates a free range and avoids stale / colliding `172.30.x` pools on upgrades.
+
+**If `docker inspect` still shows empty `IPAddress` / `EndpointID` for `…_superset_backend`**
+
+The web container never got a veth on that network (stale network, full pool, or a bad upgrade). **Tear down and recreate**:
+
+```bash
+docker compose down --remove-orphans
+# optional: remove leftover project networks if `docker network ls` still shows old superset_* bridges
+docker compose up -d
+```
+
+Then re-check: `IPAddress` must be non-empty and `getent hosts postgres` from inside `superset` must resolve.
 
 **Checklist**
 
@@ -228,14 +242,14 @@ That message means the **Superset container cannot resolve the Compose service n
 
    You should get an IP address. If this fails, the `superset` container is not on the same Compose network as `postgres` (e.g. stack started from the wrong directory, or a broken Docker DNS setup).
 
-3. **Recreate the stack after pulling compose changes** (new `superset_internal` network):
+3. **Recreate the stack after pulling compose changes** (new `superset_backend` network):
 
    ```bash
-   docker compose down
+   docker compose down --remove-orphans
    docker compose up -d
    ```
 
-4. **Re-check the app network** — `docker network inspect <project>_superset_internal` should list **all five** services and use a subnet **outside** `172.17.0.0/16` (e.g. `172.30.x.x`).
+4. **Re-check the app network** — `docker network inspect <project>_superset_backend` should list **all five** services with **non-empty** `IPv4Address` on each container.
 
 5. **VPN / corporate DNS / Docker Desktop** sometimes breaks container DNS. Restart Docker or disconnect VPN and retry step 2.
 
