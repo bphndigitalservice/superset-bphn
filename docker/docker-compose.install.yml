@@ -111,8 +111,8 @@ volumes:
   superset_home:
 
 networks:
+  # No global `name:` — see root docker-compose.yml / README troubleshooting.
   superset-network:
-    name: superset-network
     driver: bridge
     ipam:
       config:

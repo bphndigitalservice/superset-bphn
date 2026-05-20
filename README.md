@@ -201,6 +201,39 @@ When `SUPERSET_AUTH_TYPE=oauth` and Keycloak is unavailable:
 https://<host>/login/db
 ```
 
+## Troubleshooting: `could not translate host name "postgres"`
+
+That message means the **Superset container cannot resolve the Compose service name `postgres`** (embedded Docker DNS), not wrong password.
+
+**Checklist**
+
+1. **Bring the whole stack up** from the directory that contains `docker-compose.yml` (do not run only the `superset` image with plain `docker run`):
+
+   ```bash
+   docker compose ps
+   ```
+
+   You should see `postgres`, `redis`, `superset`, `superset-worker`, and `superset-beat` (names may include a project prefix).
+
+2. **Confirm DNS from inside the web container:**
+
+   ```bash
+   docker compose exec superset getent hosts postgres
+   ```
+
+   You should get an IP (e.g. `10.10.10.x`). If this fails, Superset is not on the same user-defined network as Postgres.
+
+3. **Recreate networks after upgrading compose files** (Compose now uses a **project-scoped** network name instead of a global `superset-network` to avoid clashes between installs on one host):
+
+   ```bash
+   docker compose down
+   docker compose up -d
+   ```
+
+4. **VPN / corporate DNS / Docker Desktop** sometimes breaks container DNS. Restart Docker or disconnect VPN and retry step 2.
+
+`DATABASE_URL` should keep host **`postgres`** (the service name) when using this repository’s Compose files.
+
 ## Backups
 
 Dump metadata database:

@@ -117,8 +117,9 @@ volumes:
   superset_home:
 
 networks:
+  # No global `name:` — avoids sharing one bridge across unrelated compose projects
+  # (which can break DNS for `postgres`). Compose assigns `<project>_superset-network`.
   superset-network:
-    name: superset-network
     driver: bridge
     ipam:
       config:
