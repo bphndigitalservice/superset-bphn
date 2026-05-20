@@ -205,6 +205,11 @@ https://<host>/login/db
 
 That message means the **Superset container cannot resolve the Compose service name `postgres`** (embedded Docker DNS), not wrong password.
 
+**What your `network inspect` showed**
+
+- Network `superset_default` used subnet **`172.17.0.0/16`** — the same range as Docker’s **`docker0`** default bridge. That overlap can break **embedded DNS / routing** for other containers (you may only see `redis` and `postgres` attached while `superset` fails to resolve `postgres`).
+- Current compose in this repo defines **`superset_internal` with `172.30.0.0/16`** so the stack does not share `docker0`’s subnet.
+
 **Checklist**
 
 1. **Bring the whole stack up** from the directory that contains `docker-compose.yml` (do not run only the `superset` image with plain `docker run`):
@@ -223,16 +228,18 @@ That message means the **Superset container cannot resolve the Compose service n
 
    You should get an IP address. If this fails, the `superset` container is not on the same Compose network as `postgres` (e.g. stack started from the wrong directory, or a broken Docker DNS setup).
 
-3. **Use the bundled compose files as-is** — services share Compose’s **default project network** (`<project>_default`, e.g. `superset_default`). Older revisions used a custom bridge + fixed subnet `10.10.10.0/24`, which can clash with VPN routes and break embedded DNS. After `git pull`:
+3. **Recreate the stack after pulling compose changes** (new `superset_internal` network):
 
    ```bash
    docker compose down
    docker compose up -d
    ```
 
-4. **VPN / corporate DNS / Docker Desktop** sometimes breaks container DNS. Restart Docker or disconnect VPN and retry step 2.
+4. **Re-check the app network** — `docker network inspect <project>_superset_internal` should list **all five** services and use a subnet **outside** `172.17.0.0/16` (e.g. `172.30.x.x`).
 
-5. On startup the image entrypoint **waits up to 90s** for `postgres:5432` before `superset db upgrade`, so transient DNS/TCP races are less likely.
+5. **VPN / corporate DNS / Docker Desktop** sometimes breaks container DNS. Restart Docker or disconnect VPN and retry step 2.
+
+6. On startup the image entrypoint **waits up to 90s** for `postgres:5432` before `superset db upgrade`, so transient DNS/TCP races are less likely.
 
 `DATABASE_URL` should keep host **`postgres`** (the service name) when using this repository’s Compose files.
 

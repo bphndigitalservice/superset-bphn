@@ -2,6 +2,8 @@ services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
+    networks:
+      - superset_internal
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -17,6 +19,8 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    networks:
+      - superset_internal
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -26,6 +30,8 @@ services:
   superset:
     image: ghcr.io/bphndigitalservice/superset-bphn:latest
     restart: unless-stopped
+    networks:
+      - superset_internal
     env_file: .env
     environment:
       LOAD_EXAMPLES: ${LOAD_EXAMPLES:-false}
@@ -50,6 +56,8 @@ services:
   superset-worker:
     image: ghcr.io/bphndigitalservice/superset-bphn:latest
     restart: unless-stopped
+    networks:
+      - superset_internal
     env_file: .env
     volumes:
       - ./branding:/app/superset/static/assets/branding:ro
@@ -75,6 +83,8 @@ services:
   superset-beat:
     image: ghcr.io/bphndigitalservice/superset-bphn:latest
     restart: unless-stopped
+    networks:
+      - superset_internal
     env_file: .env
     volumes:
       - superset_home:/app/superset_home
@@ -99,3 +109,11 @@ services:
 volumes:
   postgres_data:
   superset_home:
+
+networks:
+  # Avoid 172.17.0.0/16 — docker0 default; see root docker-compose.yml / README.
+  superset_internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16

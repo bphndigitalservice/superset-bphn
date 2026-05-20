@@ -7,6 +7,8 @@ services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
+    networks:
+      - superset_internal
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -22,6 +24,8 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    networks:
+      - superset_internal
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -32,6 +36,8 @@ services:
     build: .
     image: superset-bphn:local
     restart: unless-stopped
+    networks:
+      - superset_internal
     env_file: .env
     environment:
       LOAD_EXAMPLES: ${LOAD_EXAMPLES:-false}
@@ -56,6 +62,8 @@ services:
   superset-worker:
     image: superset-bphn:local
     restart: unless-stopped
+    networks:
+      - superset_internal
     env_file: .env
     volumes:
       - ./superset/assets/branding:/app/superset/static/assets/branding:ro
@@ -81,6 +89,8 @@ services:
   superset-beat:
     image: superset-bphn:local
     restart: unless-stopped
+    networks:
+      - superset_internal
     env_file: .env
     volumes:
       - superset_home:/app/superset_home
@@ -105,3 +115,12 @@ services:
 volumes:
   postgres_data:
   superset_home:
+
+networks:
+  # Avoid 172.17.0.0/16 — that range is docker0's default; Compose sometimes assigns it to
+  # project "default" bridges and breaks embedded DNS / routing for app containers.
+  superset_internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
