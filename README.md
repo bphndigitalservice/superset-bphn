@@ -161,8 +161,11 @@ Set `SUPERSET_WEBSERVER_BASE_URL` to your public HTTPS URL.
 
 | Location | Purpose |
 |----------|---------|
-| Image `branding-default/` | Build-time defaults (from `superset/assets/branding/` at build) |
-| Volume `branding/` | Runtime overrides (`./superset/assets/branding` mounted read-only) |
+| Image `branding-default/` | Build-time defaults (from `superset/assets/branding/` when the image is **built**) |
+| Volume (curl install) | `./branding/` next to `docker-compose.yml` → `/app/superset/static/assets/branding` (see `docker/docker-compose.install.yml`) |
+| Volume (clone / dev compose) | `./superset/assets/branding/` → same container path (`docker-compose.yml` in repo) |
+
+**Important:** The curl installer creates an empty `./branding/` directory. Override files go there; anything you omit is served from **`branding-default/` inside the image**, which is populated at build time from `superset/assets/branding/` (including committed `logo.png` / `favicon.png` / `theme.json`). To change defaults for everyone, update those files in the repo and publish a new image.
 
 Per-file override: place only the files you want to change on the host mount. Missing files fall back to image defaults.
 

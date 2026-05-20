@@ -227,6 +227,10 @@ Login:    ${SUPERSET_WEBSERVER_BASE_URL}/login/
 Secrets:  .env (mode 600)
 Upgrade:  curl -fsSL ${RAW_BASE}/scripts/install.sh | bash -s upgrade
 
+Branding: optional overrides in ./branding/ (logo.png or logo.svg, favicon.png, theme.json).
+          Defaults ship in the image from the repo; recreate after changing ./branding/:
+          docker compose up -d --force-recreate superset superset-worker
+
 EOF
   [ "$INSTALL_MODE" = production ] && print_production_checklist
 }

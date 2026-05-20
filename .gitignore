@@ -3,8 +3,5 @@
 *.pyc
 __pycache__/
 .DS_Store
-superset/assets/branding/logo.svg
-superset/assets/branding/logo.png
-superset/assets/branding/favicon.png
 !superset/assets/branding/.gitkeep
 !superset/assets/branding/theme.json.example
