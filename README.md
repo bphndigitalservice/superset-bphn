@@ -131,6 +131,18 @@ Login at `/login/` (username/password form). No “Sign in with keycloak” butt
 
 Create users with `superset fab create-admin` (first admin) or FAB user management after login.
 
+### Troubleshooting: `CSRF session token is missing` on login
+
+**Feedback loop:** Open DevTools → Application → Cookies for your host. After loading `/login/`, there should be a session cookie (often `session`). If it is absent after a full page load, the browser dropped it.
+
+**Ranked causes**
+
+1. **`SESSION_COOKIE_SECURE=true` while you use plain `http://` (e.g. `http://172.27.11.28:8088`).** Browsers do not store or send `Secure` cookies on HTTP, so Flask has no session on `POST /login/` → CSRF token missing. *Fix:* in `.env` set `SESSION_COOKIE_SECURE=false`, `PREFERRED_URL_SCHEME=http`, and `SUPERSET_WEBSERVER_BASE_URL` to the exact URL you type in the browser (including host/port). Recreate containers: `docker compose up -d --force-recreate superset superset-worker superset-beat`.
+2. **Base URL mismatch** (`SUPERSET_WEBSERVER_BASE_URL` does not match how users reach Superset), causing redirects and odd `next=` chains. *Fix:* align `SUPERSET_WEBSERVER_BASE_URL` with the real origin (or put HTTPS + correct `X-Forwarded-*` behind a proxy and use the public HTTPS URL).
+3. **Third-party cookie / ITP issues** (rare for first-party same-host login). *Fix:* try another browser; rule out (1) first.
+
+On container start, `superset_config` logs a **warning** when (1) applies (`http://` base URL + secure cookies).
+
 ### Keycloak SSO (default)
 
 Set `SUPERSET_AUTH_TYPE=oauth` and configure Keycloak below.

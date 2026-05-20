@@ -47,6 +47,17 @@ PREFERRED_URL_SCHEME = os.getenv("PREFERRED_URL_SCHEME", "https")
 SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "true").lower() == "true"
 SESSION_COOKIE_HTTPONLY = True
 WTF_CSRF_ENABLED = True
+
+_webserver_base = os.getenv("SUPERSET_WEBSERVER_BASE_URL", "").strip()
+if _webserver_base.startswith("http://") and SESSION_COOKIE_SECURE:
+    print(
+        "[superset_config] WARNING: SUPERSET_WEBSERVER_BASE_URL uses http:// but "
+        "SESSION_COOKIE_SECURE=true — browsers will not persist session cookies over "
+        "plain HTTP, which breaks login (CSRF session token is missing). "
+        "Set SESSION_COOKIE_SECURE=false and PREFERRED_URL_SCHEME=http for direct HTTP "
+        "access, or use HTTPS (reverse proxy) and keep secure cookies.",
+        flush=True,
+    )
 TALISMAN_ENABLED = True
 TALISMAN_CONFIG = {
     "content_security_policy": {
