@@ -42,7 +42,7 @@ services:
     environment:
       LOAD_EXAMPLES: ${LOAD_EXAMPLES:-false}
     ports:
-      - "127.0.0.1:8088:8088"
+      - "8088:8088"
     volumes:
       - ./superset/assets/branding:/app/superset/static/assets/branding:ro
       - superset_home:/app/superset_home

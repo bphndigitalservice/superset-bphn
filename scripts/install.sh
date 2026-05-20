@@ -33,6 +33,26 @@ fetch_template() {
   curl -fsSL "${RAW_BASE}/${remote_path}" -o "$dest" || die "failed to download ${remote_path} from GitHub"
 }
 
+superset_port_bind() {
+  case "${INSTALL_MODE:-simple}" in
+    production) echo "127.0.0.1:8088:8088" ;;
+    *) echo "0.0.0.0:8088:8088" ;;
+  esac
+}
+
+read_install_mode() {
+  if [ -f .install-meta ] && grep -q '^mode=production$' .install-meta 2>/dev/null; then
+    INSTALL_MODE=production
+  else
+    INSTALL_MODE=simple
+  fi
+}
+
+substitute_compose_template() {
+  local template="$1" dest="$2"
+  sed -e "s|{{SUPERSET_PORT_BIND}}|$(superset_port_bind)|g" "$template" >"$dest"
+}
+
 substitute_env_template() {
   local template="$1" dest="$2"
   sed \
@@ -136,7 +156,7 @@ cmd_install() {
   [ -f .env ] && die ".env already exists — run 'upgrade' or remove .env to reinstall"
 
   echo "Select install mode:"
-  echo "  1) Simple   — local demo at http://127.0.0.1:8088"
+  echo "  1) Simple   — demo on port 8088 (all interfaces; use this host's IP from other machines)"
   echo "  2) Production — public HTTPS URL (reverse proxy)"
   read -r -p "Choice [1]: " MODE_CHOICE
   MODE_CHOICE="${MODE_CHOICE:-1}"
@@ -178,9 +198,9 @@ cmd_install() {
   mkdir -p branding
   local tmpdir
   tmpdir="$(mktemp -d)"
-  fetch_template "docker/docker-compose.install.yml" "${tmpdir}/compose.yml"
+  fetch_template "docker/docker-compose.install.yml" "${tmpdir}/compose.template.yml"
   fetch_template "install/.env.template" "${tmpdir}/env.template"
-  cp "${tmpdir}/compose.yml" docker-compose.yml
+  substitute_compose_template "${tmpdir}/compose.template.yml" docker-compose.yml
   substitute_env_template "${tmpdir}/env.template" .env
   rm -rf "$tmpdir"
 
@@ -216,10 +236,12 @@ cmd_upgrade() {
   [ -f .env ] || die "missing .env — run install first"
   [ -f docker-compose.yml ] || die "missing docker-compose.yml — run install first"
 
+  read_install_mode
+
   local tmpdir
   tmpdir="$(mktemp -d)"
-  fetch_template "docker/docker-compose.install.yml" "${tmpdir}/compose.yml"
-  cp "${tmpdir}/compose.yml" docker-compose.yml
+  fetch_template "docker/docker-compose.install.yml" "${tmpdir}/compose.template.yml"
+  substitute_compose_template "${tmpdir}/compose.template.yml" docker-compose.yml
   rm -rf "$tmpdir"
 
   info "pulling images (${IMAGE})…"
