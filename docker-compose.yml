@@ -117,7 +117,10 @@ volumes:
   superset_home:
 
 networks:
-  # Project-scoped bridge only — Docker picks a free RFC1918 subnet (avoids forcing
-  # 172.30.x which can collide, and avoids Compose default sometimes landing on 172.17).
+  # Force a subnet OUTSIDE 172.17.0.0/16 — Docker often assigns that range to user-defined
+  # bridges too, which duplicates docker0 and breaks DNS/routing between app and postgres.
   superset_backend:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

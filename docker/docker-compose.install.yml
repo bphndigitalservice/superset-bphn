@@ -111,6 +111,9 @@ volumes:
   superset_home:
 
 networks:
-  # Project-scoped bridge only — see root docker-compose.yml / README.
+  # Pinned subnet — see root docker-compose.yml (must not be 172.17.0.0/16).
   superset_backend:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

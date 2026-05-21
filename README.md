@@ -208,21 +208,26 @@ That message means the **Superset container cannot resolve the Compose service n
 **What your diagnostics showed**
 
 - A Compose **default** bridge sometimes gets **`172.17.0.0/16`** (same idea as `docker0`), which can confuse **embedded DNS** for other containers.
-- Your `NetworkSettings` for `superset_superset_internal` had **empty `IPAddress` / `EndpointID`** — the Superset container was **not actually attached** to that bridge (no veth / no lease). Until that is fixed, `postgres` will not resolve from inside Superset.
+- Your `NetworkSettings` later showed **`Gateway":"172.17.0.1"`** and **`IPAddress":"172.17.0.4"`** on `superset_superset_backend` — that is still the **`docker0` / default-bridge range**. Even with a separate network name, **Docker’s IPAM sometimes hands out `172.17.0.0/16` to user-defined bridges**, which duplicates routing and breaks service-to-service DNS (e.g. `postgres` from Superset).
 
-This repo uses a dedicated **`superset_backend`** user-defined bridge with **no fixed `ipam` subnet** so Docker allocates a free range and avoids stale / colliding `172.30.x` pools on upgrades.
+This repo **pins** `superset_backend` to **`172.28.0.0/16`** in Compose so containers never land on `172.17.x` for this stack.
 
-**If `docker inspect` still shows empty `IPAddress` / `EndpointID` for `…_superset_backend`**
+**If `docker compose up` errors with “pool overlaps” or “subnet already in use”**
 
-The web container never got a veth on that network (stale network, full pool, or a bad upgrade). **Tear down and recreate**:
+Another project may already use `172.28.0.0/16`. Edit both compose files and pick an unused `/16` (e.g. `172.29.0.0/16`).
+
+**After pulling these compose changes, recreate the stack** (required so the bridge gets the new subnet):
 
 ```bash
 docker compose down --remove-orphans
-# optional: remove leftover project networks if `docker network ls` still shows old superset_* bridges
 docker compose up -d
 ```
 
-Then re-check: `IPAddress` must be non-empty and `getent hosts postgres` from inside `superset` must resolve.
+Confirm `docker inspect superset-superset-1` shows **`172.28.x.x`**, not `172.17.x`, then:
+
+```bash
+docker compose exec superset getent hosts postgres
+```
 
 **Checklist**
 
@@ -249,7 +254,7 @@ Then re-check: `IPAddress` must be non-empty and `getent hosts postgres` from in
    docker compose up -d
    ```
 
-4. **Re-check the app network** — `docker network inspect <project>_superset_backend` should list **all five** services with **non-empty** `IPv4Address` on each container.
+4. **Re-check the app network** — `docker network inspect <project>_superset_backend` should show subnet **`172.28.0.0/16`** (not `172.17.x`) and **all five** containers with non-empty `IPv4Address`.
 
 5. **VPN / corporate DNS / Docker Desktop** sometimes breaks container DNS. Restart Docker or disconnect VPN and retry step 2.
 
