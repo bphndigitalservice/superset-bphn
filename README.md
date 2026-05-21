@@ -145,6 +145,27 @@ Create users with `superset fab create-admin` (first admin) or FAB user manageme
 
 On container start, `superset_config` logs **INFO** lines when it auto-aligns cookies/scheme for `http://` base URLs.
 
+**Talisman override:** Flask-Talisman also sets `session_cookie_secure` (default `true`). If login works in curl but the browser still fails, check the response `Set-Cookie` for an unexpected `Secure` flag — `superset_config.py` mirrors `SESSION_COOKIE_SECURE` into Talisman.
+
+### Troubleshooting: Scarf CSP warning or API `403` after login
+
+**Scarf pixel (`apachesuperset.gateway.scarf.sh`):** Harmless telemetry. Upstream Superset 6 allows it in `img-src`; a too-minimal CSP blocks it in the console only.
+
+**API `403` on `/api/v1/chart`, `dashboard`, `recent_activity`, etc.:** Usually **role permissions**, not login. Sync FAB permissions and confirm your user has the **Admin** role:
+
+```bash
+docker compose exec superset superset init
+docker compose exec superset superset fab list-users
+```
+
+If the user has no roles or only `Public`, recreate admin or assign **Admin** in **Settings → List Users**. Then hard-refresh the browser.
+
+After upgrading the image or `superset_config.py`, recreate containers:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/bphndigitalservice/superset-bphn/main/scripts/install.sh | bash -s upgrade
+```
+
 ### Keycloak SSO (default)
 
 Set `SUPERSET_AUTH_TYPE=oauth` and configure Keycloak below.

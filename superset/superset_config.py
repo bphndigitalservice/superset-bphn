@@ -79,12 +79,52 @@ TALISMAN_ENABLED = True
 # Flask session vanishes on POST /login/ and CSRF validation fails with
 # "The CSRF session token is missing". Mirror the Flask flag here so the two
 # stay in lockstep. HSTS is also meaningless on http://, so disable it together.
+#
+# CSP is aligned with apache/superset 6.1.0 defaults. A minimal policy (only
+# default-src/img-src) blocks Scarf telemetry pixels and can break map tiles
+# and other connect-src targets the UI expects.
+_THEME_FONT_DOMAINS = (
+    "fonts.googleapis.com",
+    "fonts.gstatic.com",
+    "use.typekit.net",
+    "use.typekit.com",
+)
 TALISMAN_CONFIG = {
     "content_security_policy": {
+        "base-uri": ["'self'"],
         "default-src": ["'self'"],
-        "img-src": ["'self'", "data:", "blob:"],
+        "img-src": [
+            "'self'",
+            "blob:",
+            "data:",
+            "https://apachesuperset.gateway.scarf.sh",
+            "https://static.scarf.sh/",
+            "ows.terrestris.de",
+            "https://cdn.document360.io",
+        ],
+        "worker-src": ["'self'", "blob:"],
+        "connect-src": [
+            "'self'",
+            "https://api.mapbox.com",
+            "https://events.mapbox.com",
+            "https://tile.openstreetmap.org",
+            "https://tile.osm.ch",
+            "https://a.basemaps.cartocdn.com",
+        ],
+        "object-src": "'none'",
+        "style-src": [
+            "'self'",
+            "'unsafe-inline'",
+            *[f"https://{d}" for d in _THEME_FONT_DOMAINS],
+        ],
+        "font-src": [
+            "'self'",
+            *[f"https://{d}" for d in _THEME_FONT_DOMAINS],
+        ],
+        # unsafe-inline/eval: Superset 6 SPA bundles expect this in production
+        # images (upstream dev config). strict-dynamic+nonce is upstream default
+        # but needs nonce wiring through the app bootstrap.
         "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-        "style-src": ["'self'", "'unsafe-inline'"],
     },
     # TLS terminates at the reverse proxy; do not redirect http->https inside
     # the container or you race with the proxy and break ProxyFix.
