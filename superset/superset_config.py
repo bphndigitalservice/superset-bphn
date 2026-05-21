@@ -73,6 +73,12 @@ SESSION_COOKIE_HTTPONLY = True
 WTF_CSRF_ENABLED = True
 
 TALISMAN_ENABLED = True
+# Flask-Talisman has its OWN session_cookie_secure (default True). It stamps
+# `Secure` onto the session cookie regardless of Flask's SESSION_COOKIE_SECURE.
+# Over plain HTTP browsers (and curl) silently drop Secure cookies, so the
+# Flask session vanishes on POST /login/ and CSRF validation fails with
+# "The CSRF session token is missing". Mirror the Flask flag here so the two
+# stay in lockstep. HSTS is also meaningless on http://, so disable it together.
 TALISMAN_CONFIG = {
     "content_security_policy": {
         "default-src": ["'self'"],
@@ -80,7 +86,9 @@ TALISMAN_CONFIG = {
         "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
         "style-src": ["'self'", "'unsafe-inline'"],
     },
-    "force_https": False,
+    "force_https": SESSION_COOKIE_SECURE,
+    "session_cookie_secure": SESSION_COOKIE_SECURE,
+    "strict_transport_security": SESSION_COOKIE_SECURE,
 }
 
 PERMANENT_SESSION_LIFETIME = timedelta(
