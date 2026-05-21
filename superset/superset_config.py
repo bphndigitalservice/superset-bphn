@@ -86,7 +86,9 @@ TALISMAN_CONFIG = {
         "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
         "style-src": ["'self'", "'unsafe-inline'"],
     },
-    "force_https": SESSION_COOKIE_SECURE,
+    # TLS terminates at the reverse proxy; do not redirect http->https inside
+    # the container or you race with the proxy and break ProxyFix.
+    "force_https": False,
     "session_cookie_secure": SESSION_COOKIE_SECURE,
     "strict_transport_security": SESSION_COOKIE_SECURE,
 }
