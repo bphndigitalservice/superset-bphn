@@ -251,3 +251,12 @@ FEATURE_FLAGS = {
 # Logging
 # ---------------------------------------------------------------------------
 LOG_LEVEL = os.getenv("SUPERSET_LOG_LEVEL", "INFO")
+
+# ---------------------------------------------------------------------------
+# Default dashboard redirect (optional)
+# ---------------------------------------------------------------------------
+def FLASK_APP_MUTATOR(app):  # noqa: N802
+    from welcome_redirect import register_welcome_redirect
+
+    register_welcome_redirect(app)
+    return app

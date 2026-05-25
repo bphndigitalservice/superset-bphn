@@ -41,7 +41,11 @@ RUN . /app/.venv/bin/activate && \
     && PLAYWRIGHT_BROWSERS_PATH=/usr/local/share/playwright-browsers playwright install chromium
 
 # Production config and baked branding defaults
-COPY --chown=superset:superset superset/branding.py superset/security_manager.py /app/pythonpath/
+COPY --chown=superset:superset \
+  superset/branding.py \
+  superset/security_manager.py \
+  superset/welcome_redirect.py \
+  /app/pythonpath/
 COPY --chown=superset:superset superset/superset_config.py /app/pythonpath/superset_config.py
 COPY --chown=superset:superset superset/assets/branding/ /app/superset/static/assets/branding-default/
 

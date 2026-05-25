@@ -98,6 +98,33 @@ docker compose exec superset superset load_examples
 
 **Reset examples:** remove the `examples` database in **Data → Databases**, or wipe metadata (`docker compose down -v` destroys `postgres_data` — back up first).
 
+## Default landing dashboard
+
+Skip the stock welcome page and send users to one dashboard after login.
+
+1. Create or import the dashboard in Superset.
+2. Set its **slug** (Dashboard → Settings).
+3. In `.env`:
+
+```bash
+SUPERSET_DEFAULT_DASHBOARD_SLUG=your-dashboard-slug
+```
+
+4. Recreate the web container:
+
+```bash
+docker compose up -d --force-recreate superset
+```
+
+| `SUPERSET_DEFAULT_DASHBOARD_SLUG` | Behavior |
+|-----------------------------------|----------|
+| Unset or empty | Stock welcome page |
+| Valid slug, user has access | Redirect to `/superset/dashboard/<slug>/` |
+| Slug not in database | HTTP 404 with configuration hint |
+| Slug exists, user denied | HTTP 403 with permission hint |
+
+Celery worker/beat do not need this variable.
+
 ## Authentication
 
 Controlled by `SUPERSET_AUTH_TYPE` in `.env`:
