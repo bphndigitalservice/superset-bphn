@@ -45,6 +45,7 @@ COPY --chown=superset:superset \
   superset/branding.py \
   superset/security_manager.py \
   superset/welcome_redirect.py \
+  superset/home_menu.py \
   /app/pythonpath/
 COPY --chown=superset:superset superset/superset_config.py /app/pythonpath/superset_config.py
 COPY --chown=superset:superset superset/assets/branding/ /app/superset/static/assets/branding-default/

@@ -119,9 +119,11 @@ docker compose up -d --force-recreate superset
 | `SUPERSET_DEFAULT_DASHBOARD_SLUG` | Behavior |
 |-----------------------------------|----------|
 | Unset or empty | Stock welcome page |
-| Valid slug, user has access | Redirect to `/superset/dashboard/<slug>/` |
+| Valid slug, user has access | **Home** nav item (first in menu) + redirect to `/superset/dashboard/<slug>/` |
 | Slug not in database | HTTP 404 with configuration hint |
 | Slug exists, user denied | HTTP 403 with permission hint |
+
+The **Home** link in the top navigation opens the same dashboard as the post-login redirect. The logo (top left) is not changed — configure `SUPERSET_BRAND_LOGO_HREF` separately if needed.
 
 Celery worker/beat do not need this variable.
 

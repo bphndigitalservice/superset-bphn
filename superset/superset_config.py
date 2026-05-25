@@ -253,6 +253,13 @@ FEATURE_FLAGS = {
 LOG_LEVEL = os.getenv("SUPERSET_LOG_LEVEL", "INFO")
 
 # ---------------------------------------------------------------------------
+# Home nav menu (optional; uses SUPERSET_DEFAULT_DASHBOARD_SLUG)
+# ---------------------------------------------------------------------------
+from home_menu import home_menu_bootstrap_override
+
+COMMON_BOOTSTRAP_OVERRIDES_FUNC = home_menu_bootstrap_override
+
+# ---------------------------------------------------------------------------
 # Default dashboard redirect (optional)
 # ---------------------------------------------------------------------------
 def FLASK_APP_MUTATOR(app):  # noqa: N802
