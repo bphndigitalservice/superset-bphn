@@ -252,25 +252,50 @@ docker compose restart superset superset-worker
 
 ## Indonesia province map (Country Map)
 
-Baked GeoJSON for all **38** provinces (including Papua Selatan, Tengah, Pegunungan, Barat Daya).
+The image rebuilds Superset’s frontend so **Country Map → Indonesia** uses **38 provinces** (2022+ Papua splits), not the stock 33-province map.
 
-| Item | Value |
-|------|--------|
-| URL | `{your-origin}/static/assets/geojson-default/indonesia-38-provinces.geojson` |
-| Join on code | GeoJSON property `KODE_PROV` — Country Field Type **code** |
-| Join on name | GeoJSON property `PROVINSI` — Country Field Type **name** |
+### Create a Country Map chart
 
-**Papua province codes (Kemendagri):** 91 Papua, 92 Papua Barat, 93 Papua Selatan, 94 Papua Tengah, 95 Papua Pegunungan, 96 Papua Barat Daya.
+1. **Charts → + Chart → Country Map**
+2. **Country:** `Indonesia`
+3. **ISO 3166-2 Codes:** column with values like `ID-JB`, `ID-JK`, `ID-PS` (see mapping below)
+4. **Metric:** your measure (e.g. `SUM(value)`)
 
-**Create a chart:** Chart type **Country Map** → set **GeoJSON URL** to the table URL → set **Properties key** to `KODE_PROV` or `PROVINSI` to match your dataset → pick **Country** dimension and matching **Country Field Type**.
+Country Map joins on the **`ISO`** property inside the map (not a custom GeoJSON URL).
 
-**Update boundaries:** edit `superset/charts/geojson/indonesia-38-provinces.geojson`, rebuild the image, redeploy. Verify:
+### Join keys
 
-```bash
-curl -sI https://<host>/static/assets/geojson-default/indonesia-38-provinces.geojson
+| Your data uses | Use in **ISO 3166-2 Codes** | Example |
+|----------------|------------------------------|---------|
+| ISO 3166-2 | column as-is | `ID-JB` |
+| Kemendagri `KODE_PROV` | map to ISO in SQL | `'32'` → `'ID-JB'` |
+
+**Papua (ISO):** `ID-PA` Papua, `ID-PB` Papua Barat, `ID-PS` Selatan, `ID-PT` Tengah, `ID-PE` Pegunungan, `ID-PD` Barat Daya.
+
+**Papua (Kemendagri):** 91, 92, 93, 94, 95, 96 — see `superset/charts/geojson/kode-prov-to-iso.json` for the full 38-code table.
+
+Example SQL dimension:
+
+```sql
+CASE kode_prov
+  WHEN '32' THEN 'ID-JB'
+  WHEN '31' THEN 'ID-JK'
+  WHEN '93' THEN 'ID-PS'
+  WHEN '96' THEN 'ID-PD'
+  -- ...
+END
 ```
 
-Source file in repo: `superset/charts/geojson/indonesia-38-provinces.geojson`. Validation: `cd superset && python3 -m unittest test_indonesia_geojson.py -v`.
+### Update boundaries
+
+1. Edit `superset/charts/geojson/indonesia-38-provinces.geojson`
+2. Regenerate Country Map file: `python3 scripts/convert_geojson_for_country_map.py`
+3. Rebuild image (`docker compose build` — runs `npm ci && npm run build` in the Dockerfile frontend stage)
+4. Redeploy
+
+Validation: `cd superset && python3 -m unittest test_indonesia_geojson.py -v`.
+
+Reference GeoJSON (download/API): `{your-origin}/static/assets/geojson-default/indonesia-38-provinces.geojson`
 
 ## Break-glass login (oauth mode only)
 

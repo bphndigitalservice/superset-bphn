@@ -8,6 +8,10 @@ from pathlib import Path
 GEOJSON_PATH = (
     Path(__file__).resolve().parent / "charts/geojson/indonesia-38-provinces.geojson"
 )
+COUNTRY_MAP_GEOJSON_PATH = (
+    Path(__file__).resolve().parent / "charts/geojson/country-map-indonesia.geojson"
+)
+KODE_TO_ISO_PATH = Path(__file__).resolve().parent / "charts/geojson/kode-prov-to-iso.json"
 
 OFFICIAL_KODE_PROV = {
     "11",
@@ -94,6 +98,30 @@ class TestIndonesiaGeojson(unittest.TestCase):
             if f["properties"]["PROVINSI"] in PAPUA_KODE_BY_NAME
         }
         self.assertEqual(by_name, PAPUA_KODE_BY_NAME)
+
+
+class TestCountryMapIndonesiaGeojson(unittest.TestCase):
+    def test_country_map_format(self) -> None:
+        with COUNTRY_MAP_GEOJSON_PATH.open(encoding="utf-8") as f:
+            data = json.load(f)
+        self.assertEqual(len(data["features"]), 38)
+        isos = set()
+        for feature in data["features"]:
+            props = feature["properties"]
+            self.assertIn("ISO", props)
+            self.assertIn("NAME_1", props)
+            self.assertIn("KODE_PROV", props)
+            isos.add(props["ISO"])
+        self.assertEqual(len(isos), 38)
+
+    def test_kode_prov_maps_to_iso(self) -> None:
+        with KODE_TO_ISO_PATH.open(encoding="utf-8") as f:
+            kode_to_iso = json.load(f)
+        with COUNTRY_MAP_GEOJSON_PATH.open(encoding="utf-8") as f:
+            data = json.load(f)
+        for feature in data["features"]:
+            props = feature["properties"]
+            self.assertEqual(kode_to_iso[props["KODE_PROV"]], props["ISO"])
 
 
 if __name__ == "__main__":
