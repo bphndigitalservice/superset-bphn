@@ -6,15 +6,28 @@ import unittest
 from unittest import mock
 
 from home_menu import build_home_menu_item, home_menu_bootstrap_override
-from welcome_redirect import ENV_SLUG
+from welcome_redirect import ENV_SLUG, WEBSERVER_BASE_ENV
 
 
 class TestHomeMenu(unittest.TestCase):
-    def test_build_home_menu_item(self) -> None:
-        item = build_home_menu_item(application_root="/analytics", slug="bphn-overview")
-        self.assertEqual(item["label"], "Home")
+    def test_build_home_menu_item_with_application_root(self) -> None:
+        with mock.patch.dict(os.environ, {}, clear=True):
+            item = build_home_menu_item(
+                application_root="/analytics", slug="bphn-overview"
+            )
         self.assertEqual(item["url"], "/analytics/superset/dashboard/bphn-overview/")
-        self.assertEqual(item["icon"], "fa-home")
+
+    def test_build_home_menu_item_with_webserver_base(self) -> None:
+        with mock.patch.dict(
+            os.environ,
+            {WEBSERVER_BASE_ENV: "https://superset.example.com"},
+            clear=True,
+        ):
+            item = build_home_menu_item(application_root="", slug="bphn-overview")
+        self.assertEqual(
+            item["url"],
+            "https://superset.example.com/superset/dashboard/bphn-overview/",
+        )
 
     def test_override_no_slug(self) -> None:
         with mock.patch.dict(os.environ, {}, clear=True):

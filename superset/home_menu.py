@@ -4,27 +4,28 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from welcome_redirect import build_dashboard_path, get_configured_slug
+from welcome_redirect import (
+    build_default_dashboard_url,
+    get_configured_slug,
+)
 
 logger = logging.getLogger(__name__)
 
 
 def build_home_menu_item(*, application_root: str, slug: str) -> dict[str, str]:
-    root = application_root or ""
+    url = build_default_dashboard_url(slug=slug, application_root=application_root)
+    if url is None:
+        raise ValueError("slug is required to build Home menu item")
     return {
         "name": "Home",
         "label": "Home",
         "icon": "fa-home",
-        "url": root + build_dashboard_path(slug),
+        "url": url,
     }
 
 
 def _home_href(app) -> str | None:
-    slug = get_configured_slug()
-    if not slug:
-        return None
-    app_root = (app.config.get("APPLICATION_ROOT") or "").rstrip("/")
-    return app_root + build_dashboard_path(slug)
+    return build_default_dashboard_url(app=app)
 
 
 def _sync_home_menu_permissions() -> None:

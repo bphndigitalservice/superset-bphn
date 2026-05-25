@@ -123,7 +123,7 @@ docker compose up -d --force-recreate superset
 | Slug not in database | HTTP 404 with configuration hint |
 | Slug exists, user denied | HTTP 403 with permission hint |
 
-The **Home** link in the top navigation opens the same dashboard as the post-login redirect. The logo (top left) is not changed — configure `SUPERSET_BRAND_LOGO_HREF` separately if needed.
+The **Home** link in the top navigation opens the same dashboard as the post-login redirect. Its `href` is built from `SUPERSET_WEBSERVER_BASE_URL` when set (e.g. `https://your-host/superset/dashboard/<slug>/`), otherwise from `APPLICATION_ROOT` + path. Set `SUPERSET_WEBSERVER_BASE_URL` to the URL users actually use in the browser. The logo (top left) is not changed — configure `SUPERSET_BRAND_LOGO_HREF` separately if needed.
 
 Celery worker/beat do not need this variable.
 

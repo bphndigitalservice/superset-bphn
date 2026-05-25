@@ -7,7 +7,9 @@ from unittest import mock
 
 from welcome_redirect import (
     ENV_SLUG,
+    WEBSERVER_BASE_ENV,
     build_dashboard_path,
+    build_default_dashboard_url,
     get_configured_slug,
     is_welcome_path,
     render_error_html,
@@ -45,6 +47,19 @@ class TestWelcomeRedirectHelpers(unittest.TestCase):
         self.assertIn("Default dashboard not available", html)
         self.assertIn("missing", html)
         self.assertIn(ENV_SLUG, html)
+
+    def test_build_default_dashboard_url_webserver_base(self) -> None:
+        with mock.patch.dict(
+            os.environ,
+            {
+                ENV_SLUG: "my-dash",
+                WEBSERVER_BASE_ENV: "https://analytics.example.com",
+            },
+        ):
+            self.assertEqual(
+                build_default_dashboard_url(),
+                "https://analytics.example.com/superset/dashboard/my-dash/",
+            )
 
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ from html import escape
 logger = logging.getLogger(__name__)
 
 ENV_SLUG = "SUPERSET_DEFAULT_DASHBOARD_SLUG"
+WEBSERVER_BASE_ENV = "SUPERSET_WEBSERVER_BASE_URL"
 
 WELCOME_PATHS = frozenset(
     {
@@ -29,6 +30,33 @@ def is_welcome_path(path: str) -> bool:
 def build_dashboard_path(dashboard_slug: str) -> str:
     """Browser path for Superset 6 dashboard view (slug in URL)."""
     return f"/superset/dashboard/{dashboard_slug}/"
+
+
+def build_default_dashboard_url(
+    *,
+    slug: str | None = None,
+    app=None,
+    application_root: str | None = None,
+) -> str | None:
+    """Full or root-prefixed dashboard URL for nav links and bookmarks.
+
+    Uses SUPERSET_WEBSERVER_BASE_URL when set (e.g. https://host/superset/dashboard/slug/).
+    Otherwise prefixes APPLICATION_ROOT / bootstrap application_root.
+    """
+    resolved_slug = slug or get_configured_slug()
+    if not resolved_slug:
+        return None
+
+    path = build_dashboard_path(resolved_slug)
+
+    webserver_base = os.getenv(WEBSERVER_BASE_ENV, "").strip().rstrip("/")
+    if webserver_base:
+        return f"{webserver_base}{path}"
+
+    root = application_root
+    if root is None and app is not None:
+        root = app.config.get("APPLICATION_ROOT") or ""
+    return f"{(root or '').rstrip('/')}{path}"
 
 
 def render_error_html(*, status: int, slug: str, detail: str) -> str:
