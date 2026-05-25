@@ -123,7 +123,7 @@ docker compose up -d --force-recreate superset
 | Slug not in database | HTTP 404 with configuration hint |
 | Slug exists, user denied | HTTP 403 with permission hint |
 
-The **Home** link in the top navigation opens the same dashboard as the post-login redirect. Its `href` is built from `SUPERSET_WEBSERVER_BASE_URL` when set (e.g. `https://your-host/superset/dashboard/<slug>/`), otherwise from `APPLICATION_ROOT` + path. Set `SUPERSET_WEBSERVER_BASE_URL` to the URL users actually use in the browser. The logo (top left) is not changed — configure `SUPERSET_BRAND_LOGO_HREF` separately if needed.
+The **Home** link in the top navigation opens the same dashboard as the post-login redirect. Its `href` is built from `SUPERSET_WEBSERVER_BASE_URL` when set (e.g. `https://your-host/superset/dashboard/<slug>/`), otherwise from `APPLICATION_ROOT` + path. Set `SUPERSET_WEBSERVER_BASE_URL` to the URL users actually use in the browser. While you are on that dashboard, **Home** shows the same active underline as other nav items (stock Superset only highlights `/dashboard/*`, not `/superset/dashboard/<slug>/`). The logo (top left) is not changed — configure `SUPERSET_BRAND_LOGO_HREF` separately if needed.
 
 Celery worker/beat do not need this variable.
 
@@ -249,6 +249,28 @@ After changing branding files:
 ```bash
 docker compose restart superset superset-worker
 ```
+
+## Indonesia province map (Country Map)
+
+Baked GeoJSON for all **38** provinces (including Papua Selatan, Tengah, Pegunungan, Barat Daya).
+
+| Item | Value |
+|------|--------|
+| URL | `{your-origin}/static/assets/geojson-default/indonesia-38-provinces.geojson` |
+| Join on code | GeoJSON property `KODE_PROV` — Country Field Type **code** |
+| Join on name | GeoJSON property `PROVINSI` — Country Field Type **name** |
+
+**Papua province codes (Kemendagri):** 91 Papua, 92 Papua Barat, 93 Papua Selatan, 94 Papua Tengah, 95 Papua Pegunungan, 96 Papua Barat Daya.
+
+**Create a chart:** Chart type **Country Map** → set **GeoJSON URL** to the table URL → set **Properties key** to `KODE_PROV` or `PROVINSI` to match your dataset → pick **Country** dimension and matching **Country Field Type**.
+
+**Update boundaries:** edit `superset/charts/geojson/indonesia-38-provinces.geojson`, rebuild the image, redeploy. Verify:
+
+```bash
+curl -sI https://<host>/static/assets/geojson-default/indonesia-38-provinces.geojson
+```
+
+Source file in repo: `superset/charts/geojson/indonesia-38-provinces.geojson`. Validation: `cd superset && python3 -m unittest test_indonesia_geojson.py -v`.
 
 ## Break-glass login (oauth mode only)
 
