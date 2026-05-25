@@ -1,0 +1,9 @@
+{#
+  Home nav active underline (Menu.tsx does not select Home on /superset/dashboard/<slug>/).
+#}
+<style nonce="{{ macros.get_nonce() }}">
+  .main-nav .ant-menu-item.bphn-home-nav-active::after,
+  .main-nav .ant-menu-item.ant-menu-item-selected.bphn-home-nav-active::after {
+    transform: scale(1);
+  }
+</style>

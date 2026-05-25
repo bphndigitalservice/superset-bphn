@@ -62,6 +62,9 @@ class TestHomeMenu(unittest.TestCase):
         self.assertEqual(menu[0]["label"], "Home")
         self.assertEqual(menu[0]["url"], "/superset/dashboard/my-dash/")
         self.assertEqual(menu[1]["name"], "Dashboards")
+        self.assertEqual(
+            result["home_nav_active_path"], "/superset/dashboard/my-dash/"
+        )
 
     def test_override_missing_menu_data(self) -> None:
         with mock.patch.dict(os.environ, {ENV_SLUG: "x"}):

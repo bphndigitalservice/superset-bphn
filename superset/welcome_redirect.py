@@ -59,6 +59,11 @@ def build_default_dashboard_url(
     return f"{(root or '').rstrip('/')}{path}"
 
 
+def build_home_nav_active_path(*, slug: str, application_root: str = "") -> str:
+    """Pathname prefix for highlighting Home in the top nav (no scheme/host)."""
+    return f"{(application_root or '').rstrip('/')}{build_dashboard_path(slug)}"
+
+
 def render_error_html(*, status: int, slug: str, detail: str) -> str:
     title = "Default dashboard not available" if status == 404 else "Access denied"
     return f"""<!DOCTYPE html>

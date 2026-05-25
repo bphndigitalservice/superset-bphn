@@ -6,6 +6,7 @@ from typing import Any
 
 from welcome_redirect import (
     build_default_dashboard_url,
+    build_home_nav_active_path,
     get_configured_slug,
 )
 
@@ -93,8 +94,12 @@ def home_menu_bootstrap_override(bootstrap_data: dict[str, Any]) -> dict[str, An
 
     application_root = bootstrap_data.get("application_root", "") or ""
     home_item = build_home_menu_item(application_root=application_root, slug=slug)
+    active_path = build_home_nav_active_path(
+        slug=slug, application_root=application_root
+    )
 
     return {
+        "home_nav_active_path": active_path,
         "menu_data": {
             **menu_data,
             "menu": [home_item, *menu],

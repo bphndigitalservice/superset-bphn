@@ -1,0 +1,117 @@
+{#
+  Highlight the Home nav item on the configured default dashboard.
+  Stock Menu.tsx only marks /dashboard/* as active, not /superset/dashboard/<slug>/.
+#}
+<script nonce="{{ macros.get_nonce() }}">
+(function () {
+  var HOME_LABEL = 'Home';
+
+  function readBootstrap() {
+    var el = document.getElementById('app');
+    if (!el) {
+      return null;
+    }
+    try {
+      return JSON.parse(el.getAttribute('data-bootstrap') || '{}');
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function normalizePath(path) {
+    if (!path) {
+      return '/';
+    }
+    var normalized = path.replace(/\/+$/, '');
+    return normalized || '/';
+  }
+
+  function pathsMatch(currentPath, activePath) {
+    var current = normalizePath(currentPath);
+    var active = normalizePath(activePath);
+    return current === active || current.indexOf(active + '/') === 0;
+  }
+
+  function findHomeMenuItem(nav) {
+    var links = nav.querySelectorAll('a');
+    for (var i = 0; i < links.length; i += 1) {
+      var link = links[i];
+      var text = (link.textContent || '').trim();
+      if (text === HOME_LABEL) {
+        return link.closest('.ant-menu-item');
+      }
+    }
+    return null;
+  }
+
+  function syncHomeNavActive() {
+    var bootstrap = readBootstrap();
+    var activePath =
+      bootstrap && bootstrap.common && bootstrap.common.home_nav_active_path;
+    if (!activePath) {
+      return;
+    }
+
+    var nav = document.querySelector('[data-test="navbar-top"]');
+    if (!nav) {
+      return;
+    }
+
+    var homeItem = findHomeMenuItem(nav);
+    if (!homeItem) {
+      return;
+    }
+
+    var shouldSelect = pathsMatch(window.location.pathname, activePath);
+    if (shouldSelect) {
+      homeItem.classList.add('ant-menu-item-selected', 'bphn-home-nav-active');
+      var link = homeItem.querySelector('a');
+      if (link) {
+        link.classList.add('is-active');
+        link.setAttribute('aria-current', 'page');
+      }
+    } else {
+      homeItem.classList.remove('ant-menu-item-selected', 'bphn-home-nav-active');
+      var activeLink = homeItem.querySelector('a');
+      if (activeLink) {
+        activeLink.classList.remove('is-active');
+        activeLink.removeAttribute('aria-current');
+      }
+    }
+  }
+
+  function watchNavigation() {
+    var pushState = history.pushState;
+    var replaceState = history.replaceState;
+
+    history.pushState = function () {
+      pushState.apply(history, arguments);
+      syncHomeNavActive();
+    };
+    history.replaceState = function () {
+      replaceState.apply(history, arguments);
+      syncHomeNavActive();
+    };
+    window.addEventListener('popstate', syncHomeNavActive);
+  }
+
+  function start() {
+    syncHomeNavActive();
+    watchNavigation();
+
+    var nav = document.querySelector('[data-test="navbar-top"]');
+    if (nav && window.MutationObserver) {
+      var observer = new MutationObserver(syncHomeNavActive);
+      observer.observe(nav, { childList: true, subtree: true });
+    }
+
+    window.setInterval(syncHomeNavActive, 500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+})();
+</script>

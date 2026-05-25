@@ -10,6 +10,7 @@ from welcome_redirect import (
     WEBSERVER_BASE_ENV,
     build_dashboard_path,
     build_default_dashboard_url,
+    build_home_nav_active_path,
     get_configured_slug,
     is_welcome_path,
     render_error_html,
@@ -47,6 +48,12 @@ class TestWelcomeRedirectHelpers(unittest.TestCase):
         self.assertIn("Default dashboard not available", html)
         self.assertIn("missing", html)
         self.assertIn(ENV_SLUG, html)
+
+    def test_build_home_nav_active_path(self) -> None:
+        self.assertEqual(
+            build_home_nav_active_path(slug="my-dash", application_root="/analytics"),
+            "/analytics/superset/dashboard/my-dash/",
+        )
 
     def test_build_default_dashboard_url_webserver_base(self) -> None:
         with mock.patch.dict(
