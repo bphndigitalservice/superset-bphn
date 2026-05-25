@@ -263,7 +263,9 @@ COMMON_BOOTSTRAP_OVERRIDES_FUNC = home_menu_bootstrap_override
 # Default dashboard redirect (optional)
 # ---------------------------------------------------------------------------
 def FLASK_APP_MUTATOR(app):  # noqa: N802
+    from home_menu import register_home_nav
     from welcome_redirect import register_welcome_redirect
 
+    register_home_nav(app)
     register_welcome_redirect(app)
     return app

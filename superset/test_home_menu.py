@@ -54,6 +54,18 @@ class TestHomeMenu(unittest.TestCase):
         with mock.patch.dict(os.environ, {ENV_SLUG: "x"}):
             self.assertEqual(home_menu_bootstrap_override({}), {})
 
+    def test_override_skips_if_home_already_present(self) -> None:
+        with mock.patch.dict(os.environ, {ENV_SLUG: "my-dash"}):
+            result = home_menu_bootstrap_override(
+                {
+                    "application_root": "",
+                    "menu_data": {
+                        "menu": [{"name": "Home", "label": "Home", "url": "/x"}],
+                    },
+                }
+            )
+        self.assertEqual(result, {})
+
 
 if __name__ == "__main__":
     unittest.main()

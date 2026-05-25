@@ -41,6 +41,7 @@ services:
     env_file: .env
     environment:
       LOAD_EXAMPLES: ${LOAD_EXAMPLES:-false}
+      SUPERSET_DEFAULT_DASHBOARD_SLUG: ${SUPERSET_DEFAULT_DASHBOARD_SLUG:-}
     ports:
       - "8088:8088"
     volumes:

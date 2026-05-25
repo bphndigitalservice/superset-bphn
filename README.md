@@ -127,6 +127,13 @@ The **Home** link in the top navigation opens the same dashboard as the post-log
 
 Celery worker/beat do not need this variable.
 
+**Home not showing in the nav?**
+
+1. Confirm `.env` contains `SUPERSET_DEFAULT_DASHBOARD_SLUG=your-slug` (not commented out).
+2. Rebuild and recreate the web container: `docker compose build superset && docker compose up -d --force-recreate superset`.
+3. Check startup logs: `docker compose logs superset 2>&1 | grep home_menu` — you should see `Registered Home nav → ...`.
+4. If using the published GHCR image, it must include this feature (build from this repo or wait for a release that contains it).
+
 ## Authentication
 
 Controlled by `SUPERSET_AUTH_TYPE` in `.env`:
