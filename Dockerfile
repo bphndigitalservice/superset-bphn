@@ -49,6 +49,10 @@ COPY --chown=superset:superset \
   /app/pythonpath/
 COPY --chown=superset:superset superset/superset_config.py /app/pythonpath/superset_config.py
 COPY --chown=superset:superset superset/assets/branding/ /app/superset/static/assets/branding-default/
+COPY --chown=superset:superset \
+  superset/charts/geojson/indonesia-38-provinces.geojson \
+  /app/superset/static/assets/geojson-default/
+COPY --chown=superset:superset superset/templates/ /app/superset/templates/
 
 ENV SUPERSET_CONFIG_PATH=/app/pythonpath/superset_config.py
 ENV PYTHONPATH=/app/pythonpath:${PYTHONPATH}
