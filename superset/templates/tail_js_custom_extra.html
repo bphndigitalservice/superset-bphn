@@ -1,27 +1,24 @@
 {#
   Highlight the Home nav item on the configured default dashboard.
   Stock Menu.tsx only marks /dashboard/* as active, not /superset/dashboard/<slug>/.
+  Login page enhancer: injects logo and welcome message above the sign-in card.
 #}
 <script nonce="{{ macros.get_nonce() }}">
 (function () {
+  /* ================================================================
+     1. HOME NAV ACTIVE-STATE SYNC (existing)
+     ================================================================ */
   var HOME_LABEL = 'Home';
 
   function readBootstrap() {
     var el = document.getElementById('app');
-    if (!el) {
-      return null;
-    }
-    try {
-      return JSON.parse(el.getAttribute('data-bootstrap') || '{}');
-    } catch (err) {
-      return null;
-    }
+    if (!el) return null;
+    try { return JSON.parse(el.getAttribute('data-bootstrap') || '{}'); }
+    catch (err) { return null; }
   }
 
   function normalizePath(path) {
-    if (!path) {
-      return '/';
-    }
+    if (!path) return '/';
     var normalized = path.replace(/\/+$/, '');
     return normalized || '/';
   }
@@ -36,8 +33,7 @@
     var links = nav.querySelectorAll('a');
     for (var i = 0; i < links.length; i += 1) {
       var link = links[i];
-      var text = (link.textContent || '').trim();
-      if (text === HOME_LABEL) {
+      if ((link.textContent || '').trim() === HOME_LABEL) {
         return link.closest('.ant-menu-item');
       }
     }
@@ -46,72 +42,157 @@
 
   function syncHomeNavActive() {
     var bootstrap = readBootstrap();
-    var activePath =
-      bootstrap && bootstrap.common && bootstrap.common.home_nav_active_path;
-    if (!activePath) {
-      return;
-    }
+    var activePath = bootstrap && bootstrap.common && bootstrap.common.home_nav_active_path;
+    if (!activePath) return;
 
     var nav = document.querySelector('[data-test="navbar-top"]');
-    if (!nav) {
-      return;
-    }
+    if (!nav) return;
 
     var homeItem = findHomeMenuItem(nav);
-    if (!homeItem) {
-      return;
-    }
+    if (!homeItem) return;
 
     var shouldSelect = pathsMatch(window.location.pathname, activePath);
     if (shouldSelect) {
       homeItem.classList.add('ant-menu-item-selected', 'bphn-home-nav-active');
       var link = homeItem.querySelector('a');
-      if (link) {
-        link.classList.add('is-active');
-        link.setAttribute('aria-current', 'page');
-      }
+      if (link) { link.classList.add('is-active'); link.setAttribute('aria-current', 'page'); }
     } else {
       homeItem.classList.remove('ant-menu-item-selected', 'bphn-home-nav-active');
       var activeLink = homeItem.querySelector('a');
-      if (activeLink) {
-        activeLink.classList.remove('is-active');
-        activeLink.removeAttribute('aria-current');
-      }
+      if (activeLink) { activeLink.classList.remove('is-active'); activeLink.removeAttribute('aria-current'); }
     }
   }
 
   function watchNavigation() {
     var pushState = history.pushState;
     var replaceState = history.replaceState;
-
-    history.pushState = function () {
-      pushState.apply(history, arguments);
-      syncHomeNavActive();
-    };
-    history.replaceState = function () {
-      replaceState.apply(history, arguments);
-      syncHomeNavActive();
-    };
+    history.pushState = function () { pushState.apply(history, arguments); syncHomeNavActive(); };
+    history.replaceState = function () { replaceState.apply(history, arguments); syncHomeNavActive(); };
     window.addEventListener('popstate', syncHomeNavActive);
   }
 
-  function start() {
+  /* ================================================================
+     2. LOGIN PAGE ENHANCER
+     ================================================================ */
+  var LOGIN_APP_ID = 'app';
+  var LOGIN_FORM_SELECTOR = '[data-test="login-form"]';
+  var enhanced = false;
+
+  function getLoginBootstrap() {
+    var el = document.getElementById(LOGIN_APP_ID);
+    if (!el) return null;
+    try { return JSON.parse(el.getAttribute('data-bootstrap') || '{}'); }
+    catch (e) { return null; }
+  }
+
+  function getLogoUrl() {
+    var data = getLoginBootstrap();
+    if (!data || !data.common || !data.common.conf) return null;
+    var theme = data.common.conf.THEME_DEFAULT || data.common.conf.THEME_OVERRIDES || {};
+    var tokens = theme.token || {};
+    return tokens.brandLogoUrl || null;
+  }
+
+  function getWelcomeMessage() {
+    var data = getLoginBootstrap();
+    if (!data || !data.common || !data.common.conf) return null;
+    return data.common.conf.APP_NAME || data.common.conf.app_name || 'BPHN Analytics';
+  }
+
+  function isLoginPage() {
+    if (window.location.pathname === '/login/' || window.location.pathname === '/login') return true;
+    if (window.location.pathname === '/logout/' || window.location.pathname === '/logout') return true;
+    return false;
+  }
+
+  function injectLogo(logoUrl) {
+    var container = document.querySelector(LOGIN_FORM_SELECTOR);
+    if (!container) return false;
+
+    var card = container.querySelector('.ant-card');
+    if (!card) return false;
+
+    if (document.querySelector('.bphn-login-logo')) return true;
+
+    var logoWrapper = document.createElement('div');
+    logoWrapper.className = 'bphn-login-logo';
+
+    if (logoUrl) {
+      var img = document.createElement('img');
+      img.src = logoUrl;
+      img.alt = 'BPHN Analytics';
+      img.setAttribute('role', 'img');
+      logoWrapper.appendChild(img);
+    }
+
+    card.parentNode.insertBefore(logoWrapper, card);
+    return true;
+  }
+
+  function injectWelcomeMessage(appName) {
+    var container = document.querySelector(LOGIN_FORM_SELECTOR);
+    if (!container) return false;
+
+    var card = container.querySelector('.ant-card');
+    if (!card) return false;
+
+    if (document.querySelector('.bphn-login-welcome')) return true;
+
+    var welcomeEl = document.createElement('div');
+    welcomeEl.className = 'bphn-login-welcome';
+    welcomeEl.textContent = appName;
+
+    card.parentNode.insertBefore(welcomeEl, card);
+    return true;
+  }
+
+  function enhanceLogin() {
+    if (enhanced) return;
+    if (!isLoginPage()) return;
+    if (!document.querySelector(LOGIN_FORM_SELECTOR)) return;
+
+    var logoUrl = getLogoUrl();
+    var appName = getWelcomeMessage() || 'BPHN Analytics';
+
+    var logoOk = injectLogo(logoUrl);
+    var welcomeOk = injectWelcomeMessage(appName);
+
+    if (logoOk || welcomeOk) {
+      enhanced = true;
+      document.body.classList.add('bphn-login-page');
+    }
+  }
+
+  /* ================================================================
+     3. INIT
+     ================================================================ */
+  function init() {
     syncHomeNavActive();
     watchNavigation();
 
-    var nav = document.querySelector('[data-test="navbar-top"]');
-    if (nav && window.MutationObserver) {
-      var observer = new MutationObserver(syncHomeNavActive);
-      observer.observe(nav, { childList: true, subtree: true });
+    enhanceLogin();
+    if (!enhanced) {
+      var observer = new MutationObserver(function () {
+        if (!enhanced) enhanceLogin();
+        if (enhanced) observer.disconnect();
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+      setTimeout(function () { observer.disconnect(); }, 8000);
     }
 
-    window.setInterval(syncHomeNavActive, 500);
+    var nav = document.querySelector('[data-test="navbar-top"]');
+    if (nav && window.MutationObserver) {
+      var navObserver = new MutationObserver(syncHomeNavActive);
+      navObserver.observe(nav, { childList: true, subtree: true });
+    }
+
+    setInterval(syncHomeNavActive, 500);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    start();
+    init();
   }
 })();
 </script>
