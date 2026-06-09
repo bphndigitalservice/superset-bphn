@@ -2,8 +2,7 @@
 FROM node:20-bookworm-slim AS superset-frontend
 
 ARG SUPERSET_GIT_REF=6.1.0
-ENV NODE_ENV=production \
-    NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
