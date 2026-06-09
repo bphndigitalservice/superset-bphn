@@ -112,7 +112,7 @@ TALISMAN_CONFIG = {
             "https://a.basemaps.cartocdn.com",
         ],
         "object-src": "'none'",
-        "frame-src": ["'self'", "https://laporan.bphn.go.id"],
+        "frame-src": ["'self'", "https://laporan.bphn.go.id", "https://fliphtml5.com"],
         "style-src": [
             "'self'",
             "'unsafe-inline'",
