@@ -253,6 +253,16 @@ FEATURE_FLAGS = {
 LOG_LEVEL = os.getenv("SUPERSET_LOG_LEVEL", "INFO")
 
 # ---------------------------------------------------------------------------
+# Currency Formatting (IDR locale)
+# ---------------------------------------------------------------------------
+D3_FORMAT = {
+    "decimal": ",",
+    "thousands": ".",
+    "grouping": [3],
+    "currency": ["Rp. ", ""]
+}
+
+# ---------------------------------------------------------------------------
 # Home nav menu (optional; uses SUPERSET_DEFAULT_DASHBOARD_SLUG)
 # ---------------------------------------------------------------------------
 from home_menu import home_menu_bootstrap_override
