@@ -112,6 +112,7 @@ TALISMAN_CONFIG = {
             "https://a.basemaps.cartocdn.com",
         ],
         "object-src": "'none'",
+        "frame-src": ["'self'", "https://laporan.bphn.go.id"],
         "style-src": [
             "'self'",
             "'unsafe-inline'",
@@ -260,6 +261,24 @@ D3_FORMAT = {
     "thousands": ".",
     "grouping": [3],
     "currency": ["Rp. ", ""]
+}
+
+# ---------------------------------------------------------------------------
+# HTML Sanitization (Allow iframes)
+# ---------------------------------------------------------------------------
+HTML_SANITIZATION_SCHEMA_EXTENSIONS = {
+    "tagNames": ["iframe"],
+    "attributes": {
+        "iframe": [
+            "src",
+            "width",
+            "height",
+            "frameborder",
+            "allow",
+            "allowfullscreen",
+            "style",
+        ]
+    },
 }
 
 # ---------------------------------------------------------------------------
