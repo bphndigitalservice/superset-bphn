@@ -106,7 +106,8 @@
 }
 
 /* Header Chart */
-.chart-header {
+.chart-header,
+[data-test="slice-header"] {
   background: transparent !important;
   border-bottom: 1px solid var(--border-light) !important;
   padding: 16px 20px !important;
@@ -123,11 +124,8 @@
   align-items: center !important;
 }
 
-/* Gold Dot Accent (Innermost Selectors to avoid double dots) */
-.chart-header .header-title::before,
-.dashboard-component-header h1::before,
-.dashboard-component-header h2::before,
-.dashboard-component-header h3::before {
+/* Gold Dot Accent (Target innermost title wrapper to avoid double dots) */
+.editable-title::before {
   content: '';
   display: inline-block;
   width: 6px;
