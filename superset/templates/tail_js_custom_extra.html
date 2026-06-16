@@ -80,6 +80,51 @@
     }
   }
 
+  function isDashboardBackgroundDark() {
+    var db = document.querySelector('.dashboard');
+    if (!db) {
+      return false;
+    }
+    var bg = window.getComputedStyle(db).backgroundColor;
+    if (!bg) {
+      return false;
+    }
+    var match = bg.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+      var r = parseInt(match[1], 10);
+      var g = parseInt(match[2], 10);
+      var b = parseInt(match[3], 10);
+      var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      return luma < 80;
+    }
+    return false;
+  }
+
+  function syncBodyTheme() {
+    var mode = localStorage.getItem('theme-mode') || localStorage.getItem('superset-theme-mode');
+    var isDark = false;
+    if (mode === 'dark') {
+      isDark = true;
+    } else if (mode === 'light') {
+      isDark = false;
+    } else {
+      var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      isDark = systemDark || isDashboardBackgroundDark();
+    }
+
+    if (!isDark) {
+      isDark = isDashboardBackgroundDark();
+    }
+
+    if (isDark) {
+      document.documentElement.classList.add('theme-dark');
+      document.body.classList.add('theme-dark');
+    } else {
+      document.documentElement.classList.remove('theme-dark');
+      document.body.classList.remove('theme-dark');
+    }
+  }
+
   function watchNavigation() {
     var pushState = history.pushState;
     var replaceState = history.replaceState;
@@ -87,25 +132,37 @@
     history.pushState = function () {
       pushState.apply(history, arguments);
       syncHomeNavActive();
+      syncBodyTheme();
     };
     history.replaceState = function () {
       replaceState.apply(history, arguments);
       syncHomeNavActive();
+      syncBodyTheme();
     };
-    window.addEventListener('popstate', syncHomeNavActive);
+    window.addEventListener('popstate', function () {
+      syncHomeNavActive();
+      syncBodyTheme();
+    });
   }
 
   function start() {
     syncHomeNavActive();
+    syncBodyTheme();
     watchNavigation();
 
     var nav = document.querySelector('[data-test="navbar-top"]');
     if (nav && window.MutationObserver) {
-      var observer = new MutationObserver(syncHomeNavActive);
+      var observer = new MutationObserver(function () {
+        syncHomeNavActive();
+        syncBodyTheme();
+      });
       observer.observe(nav, { childList: true, subtree: true });
     }
 
-    window.setInterval(syncHomeNavActive, 500);
+    window.setInterval(function () {
+      syncHomeNavActive();
+      syncBodyTheme();
+    }, 500);
   }
 
   if (document.readyState === 'loading') {

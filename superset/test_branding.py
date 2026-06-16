@@ -8,6 +8,7 @@ from unittest import mock
 from branding import (
     build_theme_config,
     get_color_tokens,
+    get_logo_urls,
     load_theme_json,
 )
 
@@ -123,6 +124,23 @@ class TestBrandingThemeColors(unittest.TestCase):
             self.assertEqual(config_dark["token"]["colorPrimary"], "#3b82f6")
             self.assertEqual(config_dark["token"]["brandLogoUrl"], "/static/logo-dark.png")
             self.assertEqual(config_dark["algorithm"], "dark")
+
+    @mock.patch("branding.branding_path_preference")
+    @mock.patch("branding.branding_web_path")
+    def test_get_logo_urls(self, mock_web_path, mock_pref) -> None:
+        # If both light and dark logo exist
+        def side_effect(names):
+            if "logo-dark.png" in names:
+                return "path/to/logo-dark.png"
+            if "logo.png" in names:
+                return "path/to/logo.png"
+            return None
+        mock_pref.side_effect = side_effect
+        mock_web_path.side_effect = lambda p: f"/static/{p}"
+
+        light, dark = get_logo_urls()
+        self.assertEqual(light, "/static/path/to/logo.png")
+        self.assertEqual(dark, "/static/path/to/logo-dark.png")
 
 
 if __name__ == "__main__":

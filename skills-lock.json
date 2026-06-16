@@ -7,6 +7,12 @@
       "skillPath": "skills/docker-expert/SKILL.md",
       "computedHash": "0974b5f64fcd284c1bd662810e2388f7beb9be6784c597de4d0ad4213ccbd6af"
     },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "07ce95e6f31ae532691f044f1ab389fb87701be74800303435cf47beb1dda190"
+    },
     "multi-stage-dockerfile": {
       "source": "github/awesome-copilot",
       "sourceType": "github",

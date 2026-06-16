@@ -8,56 +8,77 @@
   --bphn-blue-accent: #3b82f6;
 
   /* Light Mode Defaults */
-  --bg-dashboard: #f5f7fb;
-  --bg-navbar: rgba(255, 255, 255, 0.78);
-  --bg-card: rgba(255, 255, 255, 0.72);
-  --bg-section: rgba(255, 255, 255, 0.8);
+  --bg-dashboard: #F3F4F6;
+  --bg-navbar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-section: transparent;
 
-  --text-main: #1d1d1f;
-  --text-muted: #6e6e73;
+  --text-main: #111827; /* Darker ink for optimal contrast */
+  --text-muted: #4B5563; /* Improved contrast for secondary text */
 
-  --border-light: rgba(26, 43, 86, 0.04);
-  --border-card: rgba(255, 255, 255, 0.5);
-  --border-card-outer: rgba(26, 43, 86, 0.08);
+  --border-light: rgba(17, 24, 39, 0.08);
+  --border-card: rgba(17, 24, 39, 0.08);
 
-  --shadow-nav: 0 8px 28px rgba(26, 43, 86, 0.03);
-  --shadow-card: 0 10px 30px rgba(26, 43, 86, 0.04), 0 1px 3px rgba(26, 43, 86, 0.02);
-  --shadow-card-hover: 0 20px 45px rgba(26, 43, 86, 0.08), 0 1px 5px rgba(26, 43, 86, 0.03);
+  /* Refined Shadows: Solid borders OR subtle shadows, no extreme blur */
+  --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
 
-  --inset-card: inset 0 1px 1px rgba(255, 255, 255, 0.8);
-  --inset-card-hover: inset 0 1px 1px rgba(255, 255, 255, 0.95);
-
-  --kpi-gradient: linear-gradient(135deg, var(--bphn-primary) 0%, var(--bphn-blue-accent) 100%);
+  --kpi-gradient: linear-gradient(135deg, var(--bphn-primary) 0%, #2A438A 100%);
   --kpi-color: var(--bphn-primary);
 }
 
+/* =========================================
+   DARK MODE OVERRIDES
+   ========================================= */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark Mode Overrides (Navy/Slate Glass) */
-    --bg-dashboard: #0b0f19;
-    --bg-navbar: rgba(15, 23, 42, 0.78);
-    --bg-card: rgba(21, 32, 54, 0.65);
-    --bg-section: rgba(21, 32, 54, 0.7);
+    --bg-dashboard: #0F1117; /* Slate base */
+    --bg-navbar: #151821;
+    --bg-card: #1C202B;
+    --bg-section: transparent;
 
-    --text-main: #f3f4f6;
-    --text-muted: #9ca3af;
+    --text-main: #F9FAFB;
+    --text-muted: #9CA3AF;
 
-    --border-light: rgba(255, 255, 255, 0.05);
-    --border-card: rgba(255, 255, 255, 0.06);
-    --border-card-outer: rgba(0, 0, 0, 0.25);
+    --border-light: rgba(255, 255, 255, 0.08);
+    --border-card: rgba(255, 255, 255, 0.08);
 
-    --shadow-nav: 0 8px 28px rgba(0, 0, 0, 0.4);
-    --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    --shadow-card-hover: 0 24px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.4);
+    --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
 
-    --inset-card: inset 0 1px 1px rgba(255, 255, 255, 0.05);
-    --inset-card-hover: inset 0 1px 1px rgba(255, 255, 255, 0.12);
-
-    --kpi-gradient: linear-gradient(135deg, var(--bphn-secondary) 0%, #ff8c00 100%);
     --kpi-color: var(--bphn-secondary);
   }
+}
 
-  /* Ant Design Dark Mode Button contrast overrides */
+html[data-theme='dark'],
+body[data-theme='dark'],
+[data-theme='dark'],
+html.theme-dark,
+.theme-dark {
+  --bg-dashboard: #0F1117;
+  --bg-navbar: #151821;
+  --bg-card: #1C202B;
+  --bg-section: transparent;
+
+  --text-main: #F9FAFB;
+  --text-muted: #9CA3AF;
+
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-card: rgba(255, 255, 255, 0.08);
+
+  --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
+
+  --kpi-color: var(--bphn-secondary);
+}
+
+/* Ant Design Dark Mode Button contrast overrides */
+[data-theme='dark'] .ant-btn,
+.theme-dark .ant-btn,
+@media (prefers-color-scheme: dark) {
   .ant-btn {
     transition: all 0.2s ease;
   }
@@ -72,13 +93,13 @@
     background: rgba(255, 255, 255, 0.08) !important;
   }
   .ant-btn-primary {
-    color: #ffffff !important;
-    background: var(--bphn-primary) !important;
-    border-color: var(--bphn-primary) !important;
+    color: #111827 !important; /* Contrast against yellow */
+    background: var(--bphn-secondary) !important;
+    border-color: var(--bphn-secondary) !important;
   }
   .ant-btn-primary:hover {
-    background: var(--bphn-blue-accent) !important;
-    border-color: var(--bphn-blue-accent) !important;
+    background: #e0a800 !important;
+    border-color: #e0a800 !important;
   }
 }
 
@@ -91,9 +112,8 @@
 .dashboard-header {
   opacity: 1 !important;
   background: var(--bg-navbar) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   box-shadow: var(--shadow-nav) !important;
+  border-bottom: 1px solid var(--border-light) !important;
 }
 
 /* Background Dashboard */
@@ -103,106 +123,129 @@
   transition: background 0.3s ease;
 }
 
-/* Semua Card Chart */
+/* Card Chart Containers */
 .dashboard-component-chart-holder,
 .dashboard-chart-id-206,
 .dashboard-chart-id-197 {
   background: var(--bg-card) !important;
-  border: 1px solid var(--border-card-outer) !important;
-  outline: 1px solid var(--border-card) !important;
-  outline-offset: -1px;
-  border-radius: 20px !important;
-  box-shadow: var(--shadow-card), var(--inset-card) !important;
+  border: 1px solid var(--border-card) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-card) !important;
   overflow: hidden !important;
-  backdrop-filter: blur(24px) saturate(120%);
-  -webkit-backdrop-filter: blur(24px) saturate(120%);
   container-type: inline-size;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 /* Hover Card */
 .dashboard-component-chart-holder:hover,
 .dashboard-chart-id-206:hover,
 .dashboard-chart-id-197:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover), var(--inset-card-hover) !important;
-  border-color: rgba(26, 43, 86, 0.15) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover) !important;
 }
 
 /* Header Chart */
 .chart-header,
 [data-test="slice-header"] {
   background: transparent !important;
-  border-bottom: 1px solid var(--border-light) !important;
-  padding: 16px 20px !important;
+  border-bottom: none !important;
+  padding: 20px 20px 8px !important;
 }
 
 .chart-header .header,
 .header-title,
 .editable-title {
-  font-size: 14px !important;
-  font-weight: 700 !important;
+  font-size: 1rem !important; /* 16px */
+  font-weight: 600 !important;
   color: var(--text-main) !important;
   letter-spacing: -0.01em;
   display: flex !important;
   align-items: center !important;
 }
 
-/* Gold Dot Accent (Target innermost title wrapper to avoid double dots) */
+/* Gold Dot Accent */
 .editable-title::before {
   content: '';
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--bphn-secondary) !important;
-  margin-right: 8px;
+  margin-right: 12px;
   flex-shrink: 0;
   vertical-align: middle;
 }
 
 /* Isi Chart */
-.slice_container {
-  padding: 16px 20px 20px !important;
+.slice_container,
+.chart-container,
+.slice-container {
+  background: transparent !important;
+  /* Removed padding override to prevent React canvas dimension conflicts and clipping */
 }
 
-/* Angka KPI */
-.big_number_total,
-.big_number,
+/* Typography: Big Number KPIs */
 .header-line {
-  font-weight: 900 !important;
+  font-weight: 700 !important;
   color: var(--kpi-color) !important;
-  letter-spacing: -0.05em !important;
+  letter-spacing: -0.02em !important;
   line-height: 1.1 !important;
-  font-size: clamp(24px, 12cqw, 48px) !important;
+  /* Scaled down clamp to prevent long currency values from clipping */
+  font-size: clamp(1.25rem, 8cqw, 2.5rem) !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  max-width: 100% !important;
 }
 
-/* Subtitle */
+/* Typography: Subtitles */
 .subheader-line,
 div[class*="subheader"] {
   color: var(--text-muted) !important;
-  font-weight: 600 !important;
-  font-size: 13px !important;
-  margin-top: 4px !important;
-  display: inline-block !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important; /* 14px */
+  letter-spacing: 0.01em !important; /* slightly stretched */
+  margin-top: 0.5rem !important;
+  display: block !important;
 }
 
-/* Section Title */
+/* Section Title & Dashboard Component Header */
 .dashboard-component-header {
-  background: var(--bg-section) !important;
-  border: 1px solid var(--border-light) !important;
-  border-radius: 20px !important;
-  box-shadow: var(--shadow-section) !important;
-  padding: 16px 22px !important;
-  transition: all 0.25s ease !important;
+  background: transparent !important;
+  border-bottom: 2px solid var(--border-light) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 16px 0 8px 0 !important; /* more balanced padding */
+  margin-bottom: 16px !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
+.dashboard-component-header > div,
+.dashboard-component-header .header-title,
 .dashboard-component-header h1,
 .dashboard-component-header h2,
-.dashboard-component-header h3 {
+.dashboard-component-header h3,
+.dashboard-component-header .editable-title {
   color: var(--text-main) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.04em;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important; /* 20px */
+  letter-spacing: -0.02em;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+
+.dashboard-component-header .header-anchor {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 1rem !important;
+  color: var(--text-muted) !important;
+  margin: 0 !important;
+}
+
+.dashboard-component-header .editable-title::before {
+  display: none !important; /* Remove dot from section titles */
 }
