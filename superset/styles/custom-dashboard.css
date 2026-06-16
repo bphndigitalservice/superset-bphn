@@ -1,0 +1,152 @@
+/* =========================================
+   THEME VARIABLES (Light & Dark Mode)
+   ========================================= */
+:root {
+  /* BPHN Brand Palette */
+  --bphn-primary: #1A2B56;
+  --bphn-secondary: #FFC107;
+  --bphn-blue-accent: #3b82f6;
+
+  /* Light Mode Defaults */
+  --bg-dashboard: #f5f7fb;
+  --bg-navbar: rgba(255, 255, 255, 0.78);
+  --bg-card: rgba(255, 255, 255, 0.72);
+  --bg-section: rgba(255, 255, 255, 0.8);
+
+  --text-main: #1d1d1f;
+  --text-muted: #6e6e73;
+
+  --border-light: rgba(26, 43, 86, 0.04);
+  --border-card: rgba(255, 255, 255, 0.5);
+  --border-card-outer: rgba(26, 43, 86, 0.08);
+
+  --shadow-nav: 0 8px 28px rgba(26, 43, 86, 0.03);
+  --shadow-card: 0 10px 30px rgba(26, 43, 86, 0.04), 0 1px 3px rgba(26, 43, 86, 0.02);
+  --shadow-card-hover: 0 20px 45px rgba(26, 43, 86, 0.08), 0 1px 5px rgba(26, 43, 86, 0.03);
+
+  --inset-card: inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  --inset-card-hover: inset 0 1px 1px rgba(255, 255, 255, 0.95);
+
+  --kpi-gradient: linear-gradient(135deg, var(--bphn-primary) 0%, var(--bphn-blue-accent) 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark Mode Overrides (Navy/Slate Glass) */
+    --bg-dashboard: #0b0f19;
+    --bg-navbar: rgba(15, 23, 42, 0.78);
+    --bg-card: rgba(21, 32, 54, 0.65);
+    --bg-section: rgba(21, 32, 54, 0.7);
+
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+
+    --border-light: rgba(255, 255, 255, 0.05);
+    --border-card: rgba(255, 255, 255, 0.06);
+    --border-card-outer: rgba(0, 0, 0, 0.25);
+
+    --shadow-nav: 0 8px 28px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    --shadow-card-hover: 0 24px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+    --inset-card: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    --inset-card-hover: inset 0 1px 1px rgba(255, 255, 255, 0.12);
+
+    --kpi-gradient: linear-gradient(135deg, var(--bphn-secondary) 0%, #ff8c00 100%);
+  }
+}
+
+/* =========================================
+   SUPERSET COMPONENTS
+   ========================================= */
+
+/* Navbar */
+.navbar {
+  opacity: 1 !important;
+  background: var(--bg-navbar) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-nav) !important;
+}
+
+/* Background Dashboard */
+.dashboard {
+  background: var(--bg-dashboard) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif !important;
+  transition: background 0.3s ease;
+}
+
+/* Semua Card Chart */
+.dashboard-component-chart-holder,
+.dashboard-chart-id-206,
+.dashboard-chart-id-197 {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-card) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--shadow-card), var(--inset-card) !important;
+  overflow: hidden !important;
+  transition: all 0.25s ease !important;
+}
+
+/* Hover Card */
+.dashboard-component-chart-holder:hover,
+.dashboard-chart-id-206:hover,
+.dashboard-chart-id-197:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover), var(--inset-card-hover) !important;
+}
+
+/* Header Chart */
+.chart-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  padding: 14px 18px !important;
+}
+
+.chart-header .header,
+.header-title,
+.editable-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: var(--text-main) !important;
+  letter-spacing: -0.02em;
+}
+
+/* Isi Chart */
+.slice_container {
+  padding: 14px 18px 18px !important;
+}
+
+/* Angka KPI */
+.big_number_total,
+.big_number,
+.header-line {
+  font-weight: 800 !important;
+  color: var(--text-main) !important;
+  letter-spacing: -0.05em !important;
+}
+
+/* Subtitle */
+.subheader-line,
+div[class*="subheader"] {
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+}
+
+/* Section Title */
+.dashboard-component-header {
+  background: var(--bg-section) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--shadow-section) !important;
+  padding: 16px 22px !important;
+  transition: all 0.25s ease !important;
+}
+
+.dashboard-component-header h1,
+.dashboard-component-header h2,
+.dashboard-component-header h3 {
+  color: var(--text-main) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em;
+}
