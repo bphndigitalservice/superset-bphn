@@ -56,14 +56,39 @@
     --kpi-gradient: linear-gradient(135deg, var(--bphn-secondary) 0%, #ff8c00 100%);
     --kpi-color: var(--bphn-secondary);
   }
+
+  /* Ant Design Dark Mode Button contrast overrides */
+  .ant-btn {
+    transition: all 0.2s ease;
+  }
+  .ant-btn:not(.ant-btn-primary):not(.ant-btn-link) {
+    color: var(--text-main) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+  }
+  .ant-btn:not(.ant-btn-primary):not(.ant-btn-link):hover {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+  }
+  .ant-btn-primary {
+    color: #ffffff !important;
+    background: var(--bphn-primary) !important;
+    border-color: var(--bphn-primary) !important;
+  }
+  .ant-btn-primary:hover {
+    background: var(--bphn-blue-accent) !important;
+    border-color: var(--bphn-blue-accent) !important;
+  }
 }
 
 /* =========================================
    SUPERSET COMPONENTS
    ========================================= */
 
-/* Navbar */
-.navbar {
+/* Navbar & Dashboard Header */
+.navbar,
+.dashboard-header {
   opacity: 1 !important;
   background: var(--bg-navbar) !important;
   backdrop-filter: blur(20px);
