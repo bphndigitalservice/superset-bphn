@@ -137,30 +137,42 @@
 
 /* Isi Chart */
 .slice_container {
-  padding: 14px 18px 18px !important;
+  padding: 16px 20px 20px !important;
 }
 
 /* Angka KPI */
 .big_number_total,
-.big_number,
+.big_number {
+  font-weight: 900 !important;
+  background: var(--kpi-gradient) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  letter-spacing: -0.05em !important;
+  line-height: 1.1 !important;
+}
+
 .header-line {
-  font-weight: 800 !important;
+  font-weight: 900 !important;
   color: var(--text-main) !important;
   letter-spacing: -0.05em !important;
+  line-height: 1.1 !important;
 }
 
 /* Subtitle */
 .subheader-line,
 div[class*="subheader"] {
   color: var(--text-muted) !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  margin-top: 4px !important;
+  display: inline-block !important;
 }
 
 /* Section Title */
 .dashboard-component-header {
   background: var(--bg-section) !important;
   border: 1px solid var(--border-light) !important;
-  border-radius: 24px !important;
+  border-radius: 20px !important;
   box-shadow: var(--shadow-section) !important;
   padding: 16px 22px !important;
   transition: all 0.25s ease !important;
