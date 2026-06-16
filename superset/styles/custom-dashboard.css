@@ -28,6 +28,7 @@
   --inset-card-hover: inset 0 1px 1px rgba(255, 255, 255, 0.95);
 
   --kpi-gradient: linear-gradient(135deg, var(--bphn-primary) 0%, var(--bphn-blue-accent) 100%);
+  --kpi-color: var(--bphn-primary);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,6 +54,7 @@
     --inset-card-hover: inset 0 1px 1px rgba(255, 255, 255, 0.12);
 
     --kpi-gradient: linear-gradient(135deg, var(--bphn-secondary) 0%, #ff8c00 100%);
+    --kpi-color: var(--bphn-secondary);
   }
 }
 
@@ -121,10 +123,11 @@
   align-items: center !important;
 }
 
-/* Gold Dot Accent */
-.chart-header .header::before,
-.header-title::before,
-.editable-title::before {
+/* Gold Dot Accent (Innermost Selectors to avoid double dots) */
+.chart-header .header-title::before,
+.dashboard-component-header h1::before,
+.dashboard-component-header h2::before,
+.dashboard-component-header h3::before {
   content: '';
   display: inline-block;
   width: 6px;
@@ -133,6 +136,7 @@
   background: var(--bphn-secondary) !important;
   margin-right: 8px;
   flex-shrink: 0;
+  vertical-align: middle;
 }
 
 /* Isi Chart */
@@ -142,18 +146,10 @@
 
 /* Angka KPI */
 .big_number_total,
-.big_number {
-  font-weight: 900 !important;
-  background: var(--kpi-gradient) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  letter-spacing: -0.05em !important;
-  line-height: 1.1 !important;
-}
-
+.big_number,
 .header-line {
   font-weight: 900 !important;
-  color: var(--text-main) !important;
+  color: var(--kpi-color) !important;
   letter-spacing: -0.05em !important;
   line-height: 1.1 !important;
 }
