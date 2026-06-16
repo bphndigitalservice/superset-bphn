@@ -1,0 +1,296 @@
+<style>
+  .preview-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  /* BPHN Brand Colors */
+  :root {
+    --bphn-primary: #1A2B56;
+    --bphn-secondary: #FFC107;
+    --bphn-accent-green: #10B981;
+    --bphn-accent-red: #EF4444;
+  }
+
+  /* Mock Dashboard Area */
+  .mock-dashboard-bg {
+    background: #f5f7fb;
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-top: 1rem;
+  }
+  
+  /* OPTION A: Soft Glass (Refined Current) */
+  .card-option-a {
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 24px;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    padding: 24px;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .card-option-a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
+  .card-option-a .header-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+  }
+  .card-option-a .title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1d1d1f;
+  }
+  .card-option-a .kpi-num {
+    font-size: 48px;
+    font-weight: 800;
+    color: #1d1d1f;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .card-option-a .trend {
+    font-size: 14px;
+    color: #6e6e73;
+  }
+
+  /* OPTION B: Modern Tech Minimal (Recommended) */
+  .card-option-b {
+    background: #ffffff;
+    border: 1px solid rgba(26, 43, 86, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(26, 43, 86, 0.04), 0 1px 3px rgba(26, 43, 86, 0.02);
+    padding: 24px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .card-option-b::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--bphn-primary);
+    opacity: 0.85;
+  }
+  .card-option-b:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(26, 43, 86, 0.08), 0 1px 4px rgba(26, 43, 86, 0.03);
+    border-color: rgba(26, 43, 86, 0.15);
+  }
+  .card-option-b .header-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-option-b .title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--bphn-primary);
+    letter-spacing: -0.01em;
+  }
+  .card-option-b .kpi-num {
+    font-size: 44px;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .card-option-b .date-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .card-option-b .trend-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    width: fit-content;
+  }
+  .card-option-b .trend-pill.negative {
+    background-color: rgba(239, 68, 68, 0.09);
+    color: var(--bphn-accent-red);
+  }
+  .card-option-b .trend-pill.positive {
+    background-color: rgba(16, 185, 129, 0.09);
+    color: var(--bphn-accent-green);
+  }
+
+  /* OPTION C: Bold Glassmorphism with Gradient Glow */
+  .card-option-c {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .card-option-c:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(26, 43, 86, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+    border-color: rgba(26, 43, 86, 0.2);
+  }
+  .card-option-c .header-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-option-c .title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-option-c .title-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bphn-secondary);
+  }
+  .card-option-c .kpi-num {
+    font-size: 46px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--bphn-primary) 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .card-option-c .trend-text {
+    font-size: 13px;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card-option-c .trend-arrow {
+    font-weight: 800;
+  }
+  .card-option-c .trend-arrow.negative {
+    color: var(--bphn-accent-red);
+  }
+
+  /* Three dots menu style */
+  .three-dots {
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .three-dots:hover {
+    color: #4b5563;
+  }
+</style>
+
+<h2>Polishing the Dashboard Cards</h2>
+<p class="subtitle">Select a visual direction below. We will refine superset/styles/custom-dashboard.css according to your selection.</p>
+
+<div class="options" data-multiselect="false">
+  
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Option A: Soft & Subtle Glass</h3>
+      <p>Refines the current CSS layout with better padding, slightly rounder corners (24px), cleaner spacing, and softer shadows. Keeps the layout simple and classic.</p>
+      
+      <div class="mock-dashboard-bg">
+        <div class="card-option-a">
+          <div class="header-area">
+            <span class="title">Layanan Posbankum</span>
+            <span class="three-dots">&#8942;</span>
+          </div>
+          <div>
+            <div style="font-size: 12px; color: #8e8e93; margin-bottom: 2px;">16 Jun 2026</div>
+            <div class="kpi-num">187.164</div>
+          </div>
+          <div class="trend">-98,5% vs Yesterday</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Option B: Modern Tech Minimalist (Recommended)</h3>
+      <p>Removes card dividers, adds a colored accent bar on the left using the BPHN primary color (#1A2B56), rounds elements to 16px, uses layered soft shadows, and formats trends inside colored pills for high visibility.</p>
+      
+      <div class="mock-dashboard-bg">
+        <div class="card-option-b">
+          <div class="header-area">
+            <span class="title">Layanan Posbankum</span>
+            <span class="three-dots">&#8942;</span>
+          </div>
+          <div>
+            <div class="date-label">16 Jun 2026</div>
+            <div class="kpi-num">187.164</div>
+          </div>
+          <div class="trend-pill negative">
+            <span>↓ -98,5% vs Yesterday</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Option C: Elegant Brand-Glow</h3>
+      <p>Employs glassmorphic card borders, gold title accents (#FFC107), gradient text for numbers, and a hybrid minimal structure. Fits an executive layout with higher contrast.</p>
+      
+      <div class="mock-dashboard-bg">
+        <div class="card-option-c">
+          <div class="header-area">
+            <span class="title"><span class="title-dot"></span>Layanan Posbankum</span>
+            <span class="three-dots">&#8942;</span>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: #6b7280; margin-bottom: 4px; font-weight: 500;">16 JUN 2026</div>
+            <div class="kpi-num">187.164</div>
+          </div>
+          <div class="trend-text">
+            <span class="trend-arrow negative">↓</span>
+            <span>-98,5% vs Yesterday</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

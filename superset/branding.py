@@ -54,12 +54,27 @@ def get_app_name() -> str:
     )
 
 
-def get_color_tokens() -> dict[str, str]:
+def get_color_tokens(*, dark: bool = False) -> dict[str, str]:
     """Ant Design v5 token keys for theme.json / env color overrides."""
     theme = load_theme_json()
     tokens: dict[str, str] = {}
-    primary = os.getenv("SUPERSET_PRIMARY_COLOR") or theme.get("primary_color")
-    secondary = os.getenv("SUPERSET_SECONDARY_COLOR") or theme.get("secondary_color")
+    if dark:
+        primary = (
+            os.getenv("SUPERSET_PRIMARY_COLOR_DARK")
+            or theme.get("primary_color_dark")
+            or os.getenv("SUPERSET_PRIMARY_COLOR")
+            or theme.get("primary_color")
+        )
+        secondary = (
+            os.getenv("SUPERSET_SECONDARY_COLOR_DARK")
+            or theme.get("secondary_color_dark")
+            or os.getenv("SUPERSET_SECONDARY_COLOR")
+            or theme.get("secondary_color")
+        )
+    else:
+        primary = os.getenv("SUPERSET_PRIMARY_COLOR") or theme.get("primary_color")
+        secondary = os.getenv("SUPERSET_SECONDARY_COLOR") or theme.get("secondary_color")
+
     if primary:
         tokens["colorPrimary"] = primary
     if secondary:
@@ -107,7 +122,7 @@ def build_theme_config(*, dark: bool = False) -> dict:
     light_logo, dark_logo = get_logo_urls()
     logo_url = dark_logo if dark else light_logo
 
-    token = {**get_color_tokens(), **get_brand_tokens(logo_url)}
+    token = {**get_color_tokens(dark=dark), **get_brand_tokens(logo_url)}
     config: dict = {"token": token}
     if dark:
         config["algorithm"] = "dark"

@@ -2,5 +2,7 @@
   "app_name": "BPHN Analytics",
   "primary_color": "#1A2B56",
   "secondary_color": "#FFC107",
+  "primary_color_dark": "#3b82f6",
+  "secondary_color_dark": "#FFC107",
   "welcome_message": "Welcome to BPHN Analytics"
 }

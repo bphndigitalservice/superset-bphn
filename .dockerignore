@@ -1,0 +1,36 @@
+# .dockerignore - Docker Build Context Exclusions
+
+# Version Control and IDE
+.git/
+.github/
+.gitignore
+.DS_Store
+.vscode/
+.idea/
+
+# Custom AI / superpowers workspace files
+.superpowers/
+.agents/
+
+# Documentation and project blueprints
+docs/
+
+# Scripts and installers not needed inside the container
+install/
+scripts/
+config/
+skills-lock.json
+README.md
+SECURITY.md
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python cache & compiler files
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.pytest_cache/

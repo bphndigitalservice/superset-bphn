@@ -1,0 +1,143 @@
+/* =========================================
+   THEME VARIABLES (Light & Dark Mode)
+   ========================================= */
+:root {
+  /* Light Mode Defaults (Your original colors) */
+  --bg-dashboard: #f5f7fb;
+  --bg-navbar: rgba(255, 255, 255, 0.78);
+  --bg-card: rgba(255, 255, 255, 0.86);
+  --bg-section: rgba(255, 255, 255, 0.8);
+
+  --text-main: #1d1d1f;
+  --text-muted: #6e6e73;
+
+  --border-light: rgba(0, 0, 0, 0.05);
+  --border-card: rgba(0, 0, 0, 0.06);
+
+  --shadow-nav: 0 8px 28px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 18px 42px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 26px 60px rgba(0, 0, 0, 0.12);
+  --shadow-section: 0 12px 32px rgba(0, 0, 0, 0.06);
+
+  --inset-card: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --inset-card-hover: inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark Mode Overrides */
+    --bg-dashboard: #000000;
+    --bg-navbar: rgba(28, 28, 30, 0.78);
+    --bg-card: rgba(44, 44, 46, 0.86);
+    --bg-section: rgba(44, 44, 46, 0.8);
+
+    --text-main: #f5f5f7;
+    --text-muted: #a1a1a6;
+
+    --border-light: rgba(255, 255, 255, 0.1);
+    --border-card: rgba(255, 255, 255, 0.1);
+
+    --shadow-nav: 0 8px 28px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 18px 42px rgba(0, 0, 0, 0.4);
+    --shadow-card-hover: 0 26px 60px rgba(0, 0, 0, 0.6);
+    --shadow-section: 0 12px 32px rgba(0, 0, 0, 0.4);
+
+    --inset-card: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    --inset-card-hover: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* =========================================
+   SUPERSET COMPONENTS
+   ========================================= */
+
+/* Navbar */
+.navbar {
+  opacity: 1 !important;
+  background: var(--bg-navbar) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-nav) !important;
+}
+
+/* Background Dashboard */
+.dashboard {
+  background: var(--bg-dashboard) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif !important;
+  transition: background 0.3s ease;
+}
+
+/* Semua Card Chart */
+.dashboard-component-chart-holder,
+.dashboard-chart-id-206,
+.dashboard-chart-id-197 {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-card) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--shadow-card), var(--inset-card) !important;
+  overflow: hidden !important;
+  transition: all 0.25s ease !important;
+}
+
+/* Hover Card */
+.dashboard-component-chart-holder:hover,
+.dashboard-chart-id-206:hover,
+.dashboard-chart-id-197:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover), var(--inset-card-hover) !important;
+}
+
+/* Header Chart */
+.chart-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  padding: 14px 18px !important;
+}
+
+.chart-header .header,
+.header-title,
+.editable-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: var(--text-main) !important;
+  letter-spacing: -0.02em;
+}
+
+/* Isi Chart */
+.slice_container {
+  padding: 14px 18px 18px !important;
+}
+
+/* Angka KPI */
+.big_number_total,
+.big_number,
+.header-line {
+  font-weight: 800 !important;
+  color: var(--text-main) !important;
+  letter-spacing: -0.05em !important;
+}
+
+/* Subtitle */
+.subheader-line,
+div[class*="subheader"] {
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+}
+
+/* Section Title */
+.dashboard-component-header {
+  background: var(--bg-section) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--shadow-section) !important;
+  padding: 16px 22px !important;
+  transition: all 0.25s ease !important;
+}
+
+.dashboard-component-header h1,
+.dashboard-component-header h2,
+.dashboard-component-header h3 {
+  color: var(--text-main) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em;
+}
