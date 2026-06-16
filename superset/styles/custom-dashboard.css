@@ -107,7 +107,7 @@
 .chart-header {
   background: transparent !important;
   border-bottom: 1px solid var(--border-light) !important;
-  padding: 14px 18px !important;
+  padding: 16px 20px !important;
 }
 
 .chart-header .header,
@@ -116,7 +116,23 @@
   font-size: 14px !important;
   font-weight: 700 !important;
   color: var(--text-main) !important;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Gold Dot Accent */
+.chart-header .header::before,
+.header-title::before,
+.editable-title::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bphn-secondary) !important;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 /* Isi Chart */
