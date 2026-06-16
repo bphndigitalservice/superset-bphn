@@ -116,6 +116,7 @@
   overflow: hidden !important;
   backdrop-filter: blur(24px) saturate(120%);
   -webkit-backdrop-filter: blur(24px) saturate(120%);
+  container-type: inline-size;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
               box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
               border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -175,6 +176,7 @@
   color: var(--kpi-color) !important;
   letter-spacing: -0.05em !important;
   line-height: 1.1 !important;
+  font-size: clamp(24px, 12cqw, 48px) !important;
 }
 
 /* Subtitle */
