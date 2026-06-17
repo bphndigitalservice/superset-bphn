@@ -151,6 +151,7 @@ PERMANENT_SESSION_LIFETIME = timedelta(
 ENABLE_TEMPLATE_PROCESSING = False
 PUBLIC_ROLE_LIKE = "Gamma"
 PUBLIC_ROLE_LIKE_GAMMA = True
+AUTH_ROLE_PUBLIC = "Public"
 AUTH_USER_REGISTRATION = False
 
 # Avoid LanguagePicker crash when locale has no entry (apache/superset#39855).
@@ -257,6 +258,7 @@ CELERY_CONFIG = CeleryConfig
 FEATURE_FLAGS = {
     "PLAYWRIGHT_REPORTS_AND_THUMBNAILS": True,
     "ENABLE_TEMPLATE_PROCESSING": False,
+    "DASHBOARD_RBAC": True,
 }
 
 # ---------------------------------------------------------------------------

@@ -65,7 +65,7 @@ Document in:
 
 1. Create or import the target dashboard in Superset.
 2. Set a stable **slug** on the dashboard (required for env-based targeting).
-3. Ensure roles (e.g. Gamma via Keycloak mapping) include permission to view that dashboard.
+3. Ensure roles (e.g. Gamma via Keycloak mapping, or `Public` if anonymous access is desired) include permission to view that dashboard. If `DASHBOARD_RBAC` is enabled, explicitly add the `Public` role in the dashboard's properties.
 4. Set `SUPERSET_DEFAULT_DASHBOARD_SLUG` and restart the `superset` service (workers do not need this hook).
 
 ## Architecture
