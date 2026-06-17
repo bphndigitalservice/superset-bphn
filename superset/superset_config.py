@@ -23,6 +23,16 @@ SECRET_KEY = os.environ["SUPERSET_SECRET_KEY"]
 SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+# Connection pool tuning — defaults (pool_size=5, max_overflow=10) cause
+# "QueuePool limit reached" errors under concurrent dashboard loads.
+SQLALCHEMY_ENGINE_OPTIONS = {
+    "pool_size": int(os.getenv("SQLALCHEMY_POOL_SIZE", "20")),
+    "max_overflow": int(os.getenv("SQLALCHEMY_MAX_OVERFLOW", "20")),
+    "pool_timeout": int(os.getenv("SQLALCHEMY_POOL_TIMEOUT", "30")),
+    "pool_recycle": int(os.getenv("SQLALCHEMY_POOL_RECYCLE", "1800")),
+    "pool_pre_ping": True,
+}
+
 # ---------------------------------------------------------------------------
 # Branding
 # ---------------------------------------------------------------------------
