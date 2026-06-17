@@ -149,7 +149,8 @@ PERMANENT_SESSION_LIFETIME = timedelta(
 )
 
 ENABLE_TEMPLATE_PROCESSING = False
-PUBLIC_ROLE_LIKE_GAMMA = False
+PUBLIC_ROLE_LIKE = "Gamma"
+PUBLIC_ROLE_LIKE_GAMMA = True
 AUTH_USER_REGISTRATION = False
 
 # Avoid LanguagePicker crash when locale has no entry (apache/superset#39855).

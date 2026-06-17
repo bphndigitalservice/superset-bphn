@@ -164,7 +164,7 @@ Secrets via `.env` only (gitignored); `.env.example` has placeholders.
 | `PERMANENT_SESSION_LIFETIME` | Configurable (e.g. 8h) |
 | `ENABLE_TEMPLATE_PROCESSING` | `False` unless explicitly needed |
 | `PLAYWRIGHT_REPORTS_AND_THUMBNAILS` | `True` |
-| Public / anonymous access | Disabled |
+| Public / anonymous access | Enabled (`PUBLIC_ROLE_LIKE = "Gamma"`) |
 
 Logging: stdout, level from `SUPERSET_LOG_LEVEL`.
 
