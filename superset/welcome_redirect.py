@@ -114,11 +114,11 @@ def handle_welcome_redirect():
     if not slug:
         return None
 
-    if not current_user or not getattr(current_user, "is_authenticated", False):
-        return None
-
     dashboard = _dashboard_for_slug(slug)
     if dashboard is None:
+        if not current_user or not getattr(current_user, "is_authenticated", False):
+            return None
+            
         logger.warning(
             "Default dashboard slug %r not found (%s not in metadata DB)",
             slug,
@@ -134,6 +134,11 @@ def handle_welcome_redirect():
     from superset import security_manager
 
     if not security_manager.can_access_dashboard(dashboard):
+        # If the user is anonymous and doesn't have access, don't show 403.
+        # Instead, return None to let Superset's default behavior redirect them to /login/.
+        if not current_user or not getattr(current_user, "is_authenticated", False):
+            return None
+
         username = getattr(g.user, "username", None) or "unknown"
         logger.warning(
             "User %r denied access to default dashboard slug %r",

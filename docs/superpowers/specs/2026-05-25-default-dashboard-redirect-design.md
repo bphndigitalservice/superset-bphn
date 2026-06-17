@@ -132,8 +132,8 @@ superset-bphn/
 ## Security
 
 - Run access check through **`security_manager`** (or equivalent `can_access_dashboard`) — never redirect to a dashboard id/slug the user cannot open in the UI.
-- Handler must no-op for unauthenticated requests (login flow unchanged).
-- Do not leak existence of dashboards to anonymous users on welcome paths; only authenticated users hit this logic after login.
+- Handler intercepts both authenticated and anonymous users. If an anonymous user does not have access to the dashboard, it falls through to the default login flow.
+- Do not leak existence of restricted dashboards to anonymous users: if they lack access, they should see the standard login prompt, not a 403 error.
 
 ## Out of Scope (v1)
 

@@ -1,251 +1,251 @@
 /* =========================================
    THEME VARIABLES (Light & Dark Mode)
    ========================================= */
-:root {
-  /* BPHN Brand Palette */
-  --bphn-primary: #1A2B56;
-  --bphn-secondary: #FFC107;
-  --bphn-blue-accent: #3b82f6;
-
-  /* Light Mode Defaults */
-  --bg-dashboard: #F3F4F6;
-  --bg-navbar: #FFFFFF;
-  --bg-card: #FFFFFF;
-  --bg-section: transparent;
-
-  --text-main: #111827; /* Darker ink for optimal contrast */
-  --text-muted: #4B5563; /* Improved contrast for secondary text */
-
-  --border-light: rgba(17, 24, 39, 0.08);
-  --border-card: rgba(17, 24, 39, 0.08);
-
-  /* Refined Shadows: Solid borders OR subtle shadows, no extreme blur */
-  --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.02);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
-
-  --kpi-gradient: linear-gradient(135deg, var(--bphn-primary) 0%, #2A438A 100%);
-  --kpi-color: var(--bphn-primary);
-}
-
-/* =========================================
-   DARK MODE OVERRIDES
-   ========================================= */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-dashboard: #0F1117; /* Slate base */
+   :root {
+    /* BPHN Brand Palette */
+    --bphn-primary: #1A2B56;
+    --bphn-secondary: #FFC107;
+    --bphn-blue-accent: #3b82f6;
+  
+    /* Light Mode Defaults */
+    --bg-dashboard: #F3F4F6;
+    --bg-navbar: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-section: transparent;
+  
+    --text-main: #111827; /* Darker ink for optimal contrast */
+    --text-muted: #4B5563; /* Improved contrast for secondary text */
+  
+    --border-light: rgba(17, 24, 39, 0.08);
+    --border-card: rgba(17, 24, 39, 0.08);
+  
+    /* Refined Shadows: Solid borders OR subtle shadows, no extreme blur */
+    --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.02);
+    --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+    --kpi-gradient: linear-gradient(135deg, var(--bphn-primary) 0%, #2A438A 100%);
+    --kpi-color: var(--bphn-primary);
+  }
+  
+  /* =========================================
+     DARK MODE OVERRIDES
+     ========================================= */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-dashboard: #0F1117; /* Slate base */
+      --bg-navbar: #151821;
+      --bg-card: #1C202B;
+      --bg-section: transparent;
+  
+      --text-main: #F9FAFB;
+      --text-muted: #9CA3AF;
+  
+      --border-light: rgba(255, 255, 255, 0.08);
+      --border-card: rgba(255, 255, 255, 0.08);
+  
+      --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.5);
+      --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.4);
+      --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
+  
+      --kpi-color: var(--bphn-secondary);
+    }
+  }
+  
+  html[data-theme='dark'],
+  body[data-theme='dark'],
+  [data-theme='dark'],
+  html.theme-dark,
+  .theme-dark {
+    --bg-dashboard: #0F1117;
     --bg-navbar: #151821;
     --bg-card: #1C202B;
     --bg-section: transparent;
-
+  
     --text-main: #F9FAFB;
     --text-muted: #9CA3AF;
-
+  
     --border-light: rgba(255, 255, 255, 0.08);
     --border-card: rgba(255, 255, 255, 0.08);
-
+  
     --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.5);
     --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.4);
     --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
-
+  
     --kpi-color: var(--bphn-secondary);
   }
-}
-
-html[data-theme='dark'],
-body[data-theme='dark'],
-[data-theme='dark'],
-html.theme-dark,
-.theme-dark {
-  --bg-dashboard: #0F1117;
-  --bg-navbar: #151821;
-  --bg-card: #1C202B;
-  --bg-section: transparent;
-
-  --text-main: #F9FAFB;
-  --text-muted: #9CA3AF;
-
-  --border-light: rgba(255, 255, 255, 0.08);
-  --border-card: rgba(255, 255, 255, 0.08);
-
-  --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.5);
-  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.4);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
-
-  --kpi-color: var(--bphn-secondary);
-}
-
-/* Ant Design Dark Mode Button contrast overrides */
-[data-theme='dark'] .ant-btn,
-.theme-dark .ant-btn,
-@media (prefers-color-scheme: dark) {
-  .ant-btn {
-    transition: all 0.2s ease;
+  
+  /* Ant Design Dark Mode Button contrast overrides */
+  [data-theme='dark'] .ant-btn,
+  .theme-dark .ant-btn,
+  @media (prefers-color-scheme: dark) {
+    .ant-btn {
+      transition: all 0.2s ease;
+    }
+    .ant-btn:not(.ant-btn-primary):not(.ant-btn-link) {
+      color: var(--text-main) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+    }
+    .ant-btn:not(.ant-btn-primary):not(.ant-btn-link):hover {
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+    .ant-btn-primary {
+      color: #111827 !important; /* Contrast against yellow */
+      background: var(--bphn-secondary) !important;
+      border-color: var(--bphn-secondary) !important;
+    }
+    .ant-btn-primary:hover {
+      background: #e0a800 !important;
+      border-color: #e0a800 !important;
+    }
   }
-  .ant-btn:not(.ant-btn-primary):not(.ant-btn-link) {
+  
+  /* =========================================
+     SUPERSET COMPONENTS
+     ========================================= */
+  
+  /* Navbar & Dashboard Header */
+  .navbar,
+  .dashboard-header {
+    opacity: 1 !important;
+    background: var(--bg-navbar) !important;
+    box-shadow: var(--shadow-nav) !important;
+    border-bottom: 1px solid var(--border-light) !important;
+  }
+  
+  /* Background Dashboard */
+  .dashboard {
+    background: var(--bg-dashboard) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif !important;
+    transition: background 0.3s ease;
+  }
+  
+  /* Card Chart Containers */
+  .dashboard-component-chart-holder,
+  .dashboard-chart-id-206,
+  .dashboard-chart-id-197 {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-card) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-card) !important;
+    overflow: hidden !important;
+    container-type: inline-size;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  /* Hover Card */
+  .dashboard-component-chart-holder:hover,
+  .dashboard-chart-id-206:hover,
+  .dashboard-chart-id-197:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover) !important;
+  }
+  
+  /* Header Chart */
+  .chart-header,
+  [data-test="slice-header"] {
+    background: transparent !important;
+    border-bottom: none !important;
+    padding: 20px 20px 8px !important;
+  }
+  
+  .chart-header .header,
+  .header-title,
+  .editable-title {
+    font-size: 1rem !important; /* 16px */
+    font-weight: 600 !important;
     color: var(--text-main) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    background: rgba(255, 255, 255, 0.04) !important;
+    letter-spacing: -0.01em;
+    display: flex !important;
+    align-items: center !important;
   }
-  .ant-btn:not(.ant-btn-primary):not(.ant-btn-link):hover {
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-  }
-  .ant-btn-primary {
-    color: #111827 !important; /* Contrast against yellow */
+  
+  /* Gold Dot Accent */
+  .editable-title::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
     background: var(--bphn-secondary) !important;
-    border-color: var(--bphn-secondary) !important;
+    margin-right: 12px;
+    flex-shrink: 0;
+    vertical-align: middle;
   }
-  .ant-btn-primary:hover {
-    background: #e0a800 !important;
-    border-color: #e0a800 !important;
+  
+  /* Isi Chart */
+  .slice_container,
+  .chart-container,
+  .slice-container {
+    background: transparent !important;
+    /* Removed padding override to prevent React canvas dimension conflicts and clipping */
   }
-}
-
-/* =========================================
-   SUPERSET COMPONENTS
-   ========================================= */
-
-/* Navbar & Dashboard Header */
-.navbar,
-.dashboard-header {
-  opacity: 1 !important;
-  background: var(--bg-navbar) !important;
-  box-shadow: var(--shadow-nav) !important;
-  border-bottom: 1px solid var(--border-light) !important;
-}
-
-/* Background Dashboard */
-.dashboard {
-  background: var(--bg-dashboard) !important;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif !important;
-  transition: background 0.3s ease;
-}
-
-/* Card Chart Containers */
-.dashboard-component-chart-holder,
-.dashboard-chart-id-206,
-.dashboard-chart-id-197 {
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border-card) !important;
-  border-radius: 12px !important;
-  box-shadow: var(--shadow-card) !important;
-  overflow: hidden !important;
-  container-type: inline-size;
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
-              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* Hover Card */
-.dashboard-component-chart-holder:hover,
-.dashboard-chart-id-206:hover,
-.dashboard-chart-id-197:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-card-hover) !important;
-}
-
-/* Header Chart */
-.chart-header,
-[data-test="slice-header"] {
-  background: transparent !important;
-  border-bottom: none !important;
-  padding: 20px 20px 8px !important;
-}
-
-.chart-header .header,
-.header-title,
-.editable-title {
-  font-size: 1rem !important; /* 16px */
-  font-weight: 600 !important;
-  color: var(--text-main) !important;
-  letter-spacing: -0.01em;
-  display: flex !important;
-  align-items: center !important;
-}
-
-/* Gold Dot Accent */
-.editable-title::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--bphn-secondary) !important;
-  margin-right: 12px;
-  flex-shrink: 0;
-  vertical-align: middle;
-}
-
-/* Isi Chart */
-.slice_container,
-.chart-container,
-.slice-container {
-  background: transparent !important;
-  /* Removed padding override to prevent React canvas dimension conflicts and clipping */
-}
-
-/* Typography: Big Number KPIs */
-.header-line {
-  font-weight: 700 !important;
-  color: var(--kpi-color) !important;
-  letter-spacing: -0.02em !important;
-  line-height: 1.1 !important;
-  /* Scaled down clamp to prevent long currency values from clipping */
-  font-size: clamp(1.25rem, 8cqw, 2.5rem) !important;
-  white-space: nowrap !important;
-  text-overflow: ellipsis !important;
-  overflow: hidden !important;
-  max-width: 100% !important;
-}
-
-/* Typography: Subtitles */
-.subheader-line,
-div[class*="subheader"] {
-  color: var(--text-muted) !important;
-  font-weight: 500 !important;
-  font-size: 0.875rem !important; /* 14px */
-  letter-spacing: 0.01em !important; /* slightly stretched */
-  margin-top: 0.5rem !important;
-  display: block !important;
-}
-
-/* Section Title & Dashboard Component Header */
-.dashboard-component-header {
-  background: transparent !important;
-  border-bottom: 2px solid var(--border-light) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  padding: 16px 0 8px 0 !important; /* more balanced padding */
-  margin-bottom: 16px !important;
-  display: flex !important;
-  align-items: center !important;
-}
-
-.dashboard-component-header > div,
-.dashboard-component-header .header-title,
-.dashboard-component-header h1,
-.dashboard-component-header h2,
-.dashboard-component-header h3,
-.dashboard-component-header .editable-title {
-  color: var(--text-main) !important;
-  font-weight: 700 !important;
-  font-size: 1.25rem !important; /* 20px */
-  letter-spacing: -0.02em;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  margin: 0 !important;
-}
-
-.dashboard-component-header .header-anchor {
-  display: inline-flex !important;
-  align-items: center !important;
-  font-size: 1rem !important;
-  color: var(--text-muted) !important;
-  margin: 0 !important;
-}
-
-.dashboard-component-header .editable-title::before {
-  display: none !important; /* Remove dot from section titles */
-}
+  
+  /* Typography: Big Number KPIs */
+  .header-line {
+    font-weight: 700 !important;
+    color: var(--kpi-color) !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.1 !important;
+    /* Scaled down clamp to prevent long currency values from clipping */
+    font-size: clamp(1.25rem, 8cqw, 2.5rem) !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    max-width: 100% !important;
+  }
+  
+  /* Typography: Subtitles */
+  .subheader-line,
+  div[class*="subheader"] {
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important; /* 14px */
+    letter-spacing: 0.01em !important; /* slightly stretched */
+    margin-top: 0.5rem !important;
+    display: block !important;
+  }
+  
+  /* Section Title & Dashboard Component Header */
+  .dashboard-component-header {
+    background: transparent !important;
+    border-bottom: 2px solid var(--border-light) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 16px 0 8px 0 !important; /* more balanced padding */
+    margin-bottom: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  .dashboard-component-header > div,
+  .dashboard-component-header .header-title,
+  .dashboard-component-header h1,
+  .dashboard-component-header h2,
+  .dashboard-component-header h3,
+  .dashboard-component-header .editable-title {
+    color: var(--text-main) !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important; /* 20px */
+    letter-spacing: -0.02em;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+  
+  .dashboard-component-header .header-anchor {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 1rem !important;
+    color: var(--text-muted) !important;
+    margin: 0 !important;
+  }
+  
+  .dashboard-component-header .editable-title::before {
+    display: none !important; /* Remove dot from section titles */
+  }
