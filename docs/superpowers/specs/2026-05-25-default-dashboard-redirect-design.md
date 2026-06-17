@@ -88,15 +88,9 @@ Use **`FLASK_APP_MUTATOR`** in `superset_config.py` to register a **`before_requ
 
 Minimum (v1):
 
+- `/`
 - `/superset/welcome/`
 - `/superset/welcome`
-
-Handler runs only when:
-
-- Request path matches one of the above, and
-- User is authenticated (`current_user` / `g.user`).
-
-**Smoke test during implementation:** If authenticated users still see welcome after login via `/` only, add `/` to the path list; do not add preemptively without evidence.
 
 ### Redirect target URL
 
