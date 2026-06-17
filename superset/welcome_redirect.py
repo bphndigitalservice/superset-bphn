@@ -12,6 +12,7 @@ WEBSERVER_BASE_ENV = "SUPERSET_WEBSERVER_BASE_URL"
 
 WELCOME_PATHS = frozenset(
     {
+        "/",
         "/superset/welcome/",
         "/superset/welcome",
     }
