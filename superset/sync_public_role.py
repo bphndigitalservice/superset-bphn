@@ -17,8 +17,21 @@ def sync_public_role_permissions(app) -> None:
                 logger.warning("Gamma role not found, skipping sync.")
                 return
 
-            # Copy all permissions from Gamma
+            # Clean up existing menu_access permissions from Public role
+            # so anonymous users don't see the top navigation bars (List Dashboards, etc).
+            perms_to_remove = []
+            for perm in public_role.permissions:
+                if perm.permission.name == "menu_access" and perm.view_menu.name != "Home":
+                    perms_to_remove.append(perm)
+                    
+            for perm in perms_to_remove:
+                security_manager.del_permission_role(public_role, perm)
+                logger.info("Removed menu_access on %s from Public role", perm.view_menu.name)
+
+            # Copy permissions from Gamma, explicitly excluding menu_access
             for perm in gamma_role.permissions:
+                if perm.permission.name == "menu_access":
+                    continue
                 if perm not in public_role.permissions:
                     security_manager.add_permission_role(public_role, perm)
                     logger.info("Copied Gamma permission %s on %s to Public", perm.permission.name, perm.view_menu.name)
