@@ -307,9 +307,10 @@ COMMON_BOOTSTRAP_OVERRIDES_FUNC = home_menu_bootstrap_override
 def FLASK_APP_MUTATOR(app):  # noqa: N802
     from home_menu import register_home_nav
     from welcome_redirect import register_welcome_redirect
-    from sync_public_role import sync_public_role_permissions
+    from sync_public_role import sync_public_role_permissions, auto_grant_public_to_default_dashboard
 
     register_home_nav(app)
     register_welcome_redirect(app)
     sync_public_role_permissions(app)
+    auto_grant_public_to_default_dashboard(app)
     return app
