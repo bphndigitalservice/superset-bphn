@@ -316,6 +316,13 @@ EXTRA_CATEGORICAL_COLOR_SCHEMES = [
         "isDefault": False,
         "colors": ["#192C70", "#FFCB05", "#4A6BC7", "#E0B504"],
     },
+    {
+        "id": "bphn_tri",
+        "label": "BPHN 3 Warna",
+        "description": "3 categories: biru, kuning, biru muda",
+        "isDefault": False,
+        "colors": ["#192C70", "#FFCB05", "#4A6BC7"],
+    },
 ]
 
 EXTRA_SEQUENTIAL_COLOR_SCHEMES = [
@@ -387,9 +394,11 @@ def FLASK_APP_MUTATOR(app):  # noqa: N802
     from home_menu import register_home_nav
     from welcome_redirect import register_welcome_redirect
     from sync_public_role import sync_public_role_permissions, auto_grant_public_to_default_dashboard
+    from sync_dashboard_colors import sync_dashboard_label_colors
 
     register_home_nav(app)
     register_welcome_redirect(app)
     sync_public_role_permissions(app)
     auto_grant_public_to_default_dashboard(app)
+    sync_dashboard_label_colors(app)
     return app
