@@ -63,6 +63,8 @@ COPY --chown=superset:superset \
   superset/welcome_redirect.py \
   superset/home_menu.py \
   superset/sync_public_role.py \
+  superset/chart_colors.py \
+  superset/sync_dashboard_colors.py \
   /app/pythonpath/
 COPY --chown=superset:superset superset/superset_config.py /app/pythonpath/superset_config.py
 COPY --chown=superset:superset superset/assets/branding/ /app/superset/static/assets/branding-default/
