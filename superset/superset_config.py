@@ -278,17 +278,25 @@ D3_FORMAT = {
 
 # ---------------------------------------------------------------------------
 # Chart color presets (BPHN brand: #192C70 blue, #FFCB05 yellow)
+# Series 1 → blue, series 2 → yellow (e.g. Pagu / Realisasi bar pairs).
 # ---------------------------------------------------------------------------
 EXTRA_CATEGORICAL_COLOR_SCHEMES = [
     {
+        "id": "bphn_dual",
+        "label": "BPHN Biru & Kuning",
+        "description": "2 series: biru (#192C70) lalu kuning (#FFCB05)",
+        "isDefault": True,
+        "colors": ["#192C70", "#FFCB05"],
+    },
+    {
         "id": "bphn_brand",
         "label": "BPHN Brand",
-        "description": "Official BPHN blue and yellow with supporting tones",
-        "isDefault": True,
+        "description": "Biru & kuning first, then extended palette for 3+ series",
+        "isDefault": False,
         "colors": [
-            "#192C70",
+            "#192C70",  # primary — series 1 (e.g. Pagu)
+            "#FFCB05",  # secondary — series 2 (e.g. Realisasi)
             "#4A6BC7",
-            "#FFCB05",
             "#2B4089",
             "#0D9488",
             "#6366F1",
