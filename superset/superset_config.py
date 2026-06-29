@@ -277,6 +277,69 @@ D3_FORMAT = {
 }
 
 # ---------------------------------------------------------------------------
+# Chart color presets (BPHN brand: #192C70 blue, #FFCB05 yellow)
+# ---------------------------------------------------------------------------
+EXTRA_CATEGORICAL_COLOR_SCHEMES = [
+    {
+        "id": "bphn_brand",
+        "label": "BPHN Brand",
+        "description": "Official BPHN blue and yellow with supporting tones",
+        "isDefault": True,
+        "colors": [
+            "#192C70",
+            "#4A6BC7",
+            "#FFCB05",
+            "#2B4089",
+            "#0D9488",
+            "#6366F1",
+            "#E0B504",
+            "#059669",
+            "#64748B",
+            "#7C3AED",
+            "#DC2626",
+            "#EC4899",
+        ],
+    },
+]
+
+EXTRA_SEQUENTIAL_COLOR_SCHEMES = [
+    {
+        "id": "bphn_blue",
+        "label": "BPHN Blue",
+        "description": "Light to deep BPHN blue — heatmaps and choropleths",
+        "isDefault": True,
+        "isDiverging": False,
+        "colors": [
+            "#EEF1F8",
+            "#C5CEE6",
+            "#8FA0CC",
+            "#5A73B3",
+            "#3D5A9C",
+            "#2B4089",
+            "#192C70",
+            "#101D4A",
+        ],
+    },
+    {
+        "id": "bphn_yellow_blue",
+        "label": "BPHN Yellow ↔ Blue",
+        "description": "Diverging yellow-to-blue — comparisons vs baseline",
+        "isDefault": False,
+        "isDiverging": True,
+        "colors": [
+            "#FFCB05",
+            "#FFD84D",
+            "#FFE680",
+            "#FFF8D6",
+            "#E8EDF5",
+            "#8FA0CC",
+            "#2B4089",
+            "#192C70",
+        ],
+    },
+]
+
+# ---------------------------------------------------------------------------
 # HTML Sanitization (Allow iframes)
 # ---------------------------------------------------------------------------
 HTML_SANITIZATION_SCHEMA_EXTENSIONS = {

@@ -3,9 +3,9 @@
    ========================================= */
    :root {
     /* BPHN Brand Palette */
-    --bphn-primary: #1A2B56;
-    --bphn-secondary: #FFC107;
-    --bphn-blue-accent: #3b82f6;
+    --bphn-primary: #192C70;
+    --bphn-secondary: #FFCB05;
+    --bphn-blue-accent: #4A6BC7;
   
     /* Light Mode Defaults */
     --bg-dashboard: #F3F4F6;
@@ -24,7 +24,7 @@
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.02);
     --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
   
-    --kpi-gradient: linear-gradient(135deg, var(--bphn-primary) 0%, #2A438A 100%);
+    --kpi-gradient: linear-gradient(135deg, var(--bphn-primary) 0%, #2B4089 100%);
     --kpi-color: var(--bphn-primary);
   }
   
@@ -98,8 +98,8 @@
       border-color: var(--bphn-secondary) !important;
     }
     .ant-btn-primary:hover {
-      background: #e0a800 !important;
-      border-color: #e0a800 !important;
+      background: #E0B504 !important;
+      border-color: #E0B504 !important;
     }
   }
   

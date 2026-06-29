@@ -17,21 +17,21 @@ class TestBrandingThemeColors(unittest.TestCase):
     @mock.patch("branding.load_theme_json")
     def test_get_color_tokens_light_defaults(self, mock_load_theme) -> None:
         mock_load_theme.return_value = {
-            "primary_color": "#1A2B56",
-            "secondary_color": "#FFC107",
-            "primary_color_dark": "#3b82f6",
-            "secondary_color_dark": "#FFC107",
+            "primary_color": "#192C70",
+            "secondary_color": "#FFCB05",
+            "primary_color_dark": "#4A6BC7",
+            "secondary_color_dark": "#FFCB05",
         }
         with mock.patch.dict(os.environ, {}, clear=True):
             tokens = get_color_tokens(dark=False)
-            self.assertEqual(tokens.get("colorPrimary"), "#1A2B56")
-            self.assertEqual(tokens.get("colorSuccess"), "#FFC107")
+            self.assertEqual(tokens.get("colorPrimary"), "#192C70")
+            self.assertEqual(tokens.get("colorSuccess"), "#FFCB05")
 
     @mock.patch("branding.load_theme_json")
     def test_get_color_tokens_light_env_override(self, mock_load_theme) -> None:
         mock_load_theme.return_value = {
-            "primary_color": "#1A2B56",
-            "secondary_color": "#FFC107",
+            "primary_color": "#192C70",
+            "secondary_color": "#FFCB05",
         }
         env = {
             "SUPERSET_PRIMARY_COLOR": "#00FF00",
@@ -45,36 +45,36 @@ class TestBrandingThemeColors(unittest.TestCase):
     @mock.patch("branding.load_theme_json")
     def test_get_color_tokens_dark_defaults(self, mock_load_theme) -> None:
         mock_load_theme.return_value = {
-            "primary_color": "#1A2B56",
-            "secondary_color": "#FFC107",
-            "primary_color_dark": "#3b82f6",
-            "secondary_color_dark": "#FFC107",
+            "primary_color": "#192C70",
+            "secondary_color": "#FFCB05",
+            "primary_color_dark": "#4A6BC7",
+            "secondary_color_dark": "#FFCB05",
         }
         with mock.patch.dict(os.environ, {}, clear=True):
             tokens = get_color_tokens(dark=True)
-            self.assertEqual(tokens.get("colorPrimary"), "#3b82f6")
-            self.assertEqual(tokens.get("colorSuccess"), "#FFC107")
+            self.assertEqual(tokens.get("colorPrimary"), "#4A6BC7")
+            self.assertEqual(tokens.get("colorSuccess"), "#FFCB05")
 
     @mock.patch("branding.load_theme_json")
     def test_get_color_tokens_dark_fallback_to_light(self, mock_load_theme) -> None:
         # No dark properties in theme.json
         mock_load_theme.return_value = {
-            "primary_color": "#1A2B56",
-            "secondary_color": "#FFC107",
+            "primary_color": "#192C70",
+            "secondary_color": "#FFCB05",
         }
         with mock.patch.dict(os.environ, {}, clear=True):
             tokens = get_color_tokens(dark=True)
             # Should fallback to light theme properties
-            self.assertEqual(tokens.get("colorPrimary"), "#1A2B56")
-            self.assertEqual(tokens.get("colorSuccess"), "#FFC107")
+            self.assertEqual(tokens.get("colorPrimary"), "#192C70")
+            self.assertEqual(tokens.get("colorSuccess"), "#FFCB05")
 
     @mock.patch("branding.load_theme_json")
     def test_get_color_tokens_dark_env_override(self, mock_load_theme) -> None:
         mock_load_theme.return_value = {
-            "primary_color": "#1A2B56",
-            "secondary_color": "#FFC107",
-            "primary_color_dark": "#3b82f6",
-            "secondary_color_dark": "#FFC107",
+            "primary_color": "#192C70",
+            "secondary_color": "#FFCB05",
+            "primary_color_dark": "#4A6BC7",
+            "secondary_color_dark": "#FFCB05",
         }
         env = {
             "SUPERSET_PRIMARY_COLOR_DARK": "#FFFF00",
@@ -88,8 +88,8 @@ class TestBrandingThemeColors(unittest.TestCase):
     @mock.patch("branding.load_theme_json")
     def test_get_color_tokens_dark_env_fallback_to_light(self, mock_load_theme) -> None:
         mock_load_theme.return_value = {
-            "primary_color": "#1A2B56",
-            "secondary_color": "#FFC107",
+            "primary_color": "#192C70",
+            "secondary_color": "#FFCB05",
         }
         env = {
             "SUPERSET_PRIMARY_COLOR": "#00FF00",
@@ -105,23 +105,23 @@ class TestBrandingThemeColors(unittest.TestCase):
     @mock.patch("branding.load_theme_json")
     def test_build_theme_config(self, mock_load_theme, mock_get_logos) -> None:
         mock_load_theme.return_value = {
-            "primary_color": "#1A2B56",
-            "secondary_color": "#FFC107",
-            "primary_color_dark": "#3b82f6",
-            "secondary_color_dark": "#FFC107",
+            "primary_color": "#192C70",
+            "secondary_color": "#FFCB05",
+            "primary_color_dark": "#4A6BC7",
+            "secondary_color_dark": "#FFCB05",
         }
         mock_get_logos.return_value = ("/static/logo.png", "/static/logo-dark.png")
 
         with mock.patch.dict(os.environ, {}, clear=True):
             # Light theme config
             config_light = build_theme_config(dark=False)
-            self.assertEqual(config_light["token"]["colorPrimary"], "#1A2B56")
+            self.assertEqual(config_light["token"]["colorPrimary"], "#192C70")
             self.assertEqual(config_light["token"]["brandLogoUrl"], "/static/logo.png")
             self.assertNotIn("algorithm", config_light)
 
             # Dark theme config
             config_dark = build_theme_config(dark=True)
-            self.assertEqual(config_dark["token"]["colorPrimary"], "#3b82f6")
+            self.assertEqual(config_dark["token"]["colorPrimary"], "#4A6BC7")
             self.assertEqual(config_dark["token"]["brandLogoUrl"], "/static/logo-dark.png")
             self.assertEqual(config_dark["algorithm"], "dark")
 
