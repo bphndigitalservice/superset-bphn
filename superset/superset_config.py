@@ -278,35 +278,43 @@ D3_FORMAT = {
 
 # ---------------------------------------------------------------------------
 # Chart color presets (BPHN brand: #192C70 blue, #FFCB05 yellow)
-# Series 1 → blue, series 2 → yellow (e.g. Pagu / Realisasi bar pairs).
+# 2 series  → #1 biru, #2 kuning (e.g. Pagu / Realisasi)
+# 4 slices  → biru, kuning, biru muda, emas (e.g. Agama pie chart)
 # ---------------------------------------------------------------------------
 EXTRA_CATEGORICAL_COLOR_SCHEMES = [
     {
-        "id": "bphn_dual",
-        "label": "BPHN Biru & Kuning",
-        "description": "2 series: biru (#192C70) lalu kuning (#FFCB05)",
-        "isDefault": True,
-        "colors": ["#192C70", "#FFCB05"],
-    },
-    {
         "id": "bphn_brand",
         "label": "BPHN Brand",
-        "description": "Biru & kuning first, then extended palette for 3+ series",
-        "isDefault": False,
+        "description": "Biru & kuning first, then brand tones for 3–4+ categories",
+        "isDefault": True,
         "colors": [
-            "#192C70",  # primary — series 1 (e.g. Pagu)
-            "#FFCB05",  # secondary — series 2 (e.g. Realisasi)
-            "#4A6BC7",
+            "#192C70",  # 1 — primary biru
+            "#FFCB05",  # 2 — primary kuning
+            "#4A6BC7",  # 3 — biru muda
+            "#E0B504",  # 4 — emas / kuning gelap
             "#2B4089",
             "#0D9488",
             "#6366F1",
-            "#E0B504",
             "#059669",
             "#64748B",
             "#7C3AED",
             "#DC2626",
             "#EC4899",
         ],
+    },
+    {
+        "id": "bphn_dual",
+        "label": "BPHN Biru & Kuning",
+        "description": "Exactly 2 series: biru lalu kuning",
+        "isDefault": False,
+        "colors": ["#192C70", "#FFCB05"],
+    },
+    {
+        "id": "bphn_quad",
+        "label": "BPHN 4 Warna",
+        "description": "4 categories: biru, kuning, biru muda, emas",
+        "isDefault": False,
+        "colors": ["#192C70", "#FFCB05", "#4A6BC7", "#E0B504"],
     },
 ]
 
